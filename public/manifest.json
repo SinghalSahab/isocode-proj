@@ -1,0 +1,24 @@
+{
+  "name": "Company A - FMCG Retailer Ordering",
+  "short_name": "Company A",
+  "description": "Kirana retailer ordering application with AI order capture for Company A, Jabalpur.",
+  "start_url": "/catalogue",
+  "display": "standalone",
+  "background_color": "#FAFAF7",
+  "theme_color": "#1F6F4A",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icons/icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

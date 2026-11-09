@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #FAFAF7;
+  --surface: #FFFFFF;
+  --ink: #16181A;
+  --ink-muted: #5B6168;
+  --border: #E6E6E1;
+  --accent: #1F6F4A;
+}
+
+body {
+  color: var(--ink);
+  background-color: var(--background);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans Devanagari", Mangal, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Tabular numerals for prices and financial data */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Minimum 48px touch targets for mobile accessibility */
+.touch-target {
+  min-height: 48px;
+  min-width: 48px;
+}

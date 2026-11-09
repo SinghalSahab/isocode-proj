@@ -48,3 +48,4 @@ describe("Demo Fallback & Offline Resilience (lib/db/demo-fallback.ts)", () => {
     expect(tea?.stockCases).toBe(0); // Out of stock as per brief
   });
 });
+

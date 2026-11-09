@@ -184,3 +184,4 @@ export const DEMO_PRODUCTS = [
     scheme: null,
   },
 ];
+

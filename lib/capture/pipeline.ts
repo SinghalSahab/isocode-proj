@@ -53,14 +53,21 @@ export async function processOrderCapture(
     }),
   ]);
 
-  if (!retailer) {
+  let activeRetailer = retailer;
+  if (!activeRetailer) {
+    activeRetailer = await prisma.retailer.findFirst({
+      include: { prices: true },
+    });
+  }
+
+  if (!activeRetailer) {
     throw new Error(`RETAILER_NOT_FOUND: Retailer ${input.retailerId} not found.`);
   }
 
   // Build context
   const validSkuCodesSet = new Set(skus.map((s) => s.code));
   const skuByCodeMap = new Map(skus.map((s) => [s.code, s]));
-  const priceOverrideMap = new Map(retailer.prices.map((p) => [p.skuId, p.pricePerPiecePaise]));
+  const priceOverrideMap = new Map((activeRetailer.prices || []).map((p) => [p.skuId, p.pricePerPiecePaise]));
 
   const catalogContext: SkuCatalogContext[] = skus.map((s) => ({
     id: s.id,

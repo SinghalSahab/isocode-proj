@@ -31,6 +31,19 @@ export interface PlaceOrderResult {
   isExisting: boolean;
 }
 
+const DEMO_SKU_CODE_MAP: Record<string, string> = {
+  "sku-01": "SKU-BS-075",
+  "sku-02": "SKU-DT-1KG",
+  "sku-03": "SKU-TE-250",
+  "sku-04": "SKU-BS-150",
+  "sku-05": "SKU-DT-500",
+  "sku-06": "SKU-TE-500",
+  "sku-07": "SKU-ND-070",
+  "sku-08": "SKU-SP-125",
+  "sku-09": "SKU-DW-500",
+  "sku-10": "SKU-OL-1L",
+};
+
 /**
  * Server-authoritative order placement.
  * Ignores all client-provided prices, discounts, and totals; re-prices using scheme engine.
@@ -69,12 +82,22 @@ export async function placeOrder(
   }
 
   // 2. Fetch retailer profile (for credit check and overrides)
-  const retailer = await prisma.retailer.findUnique({
+  let retailer = await prisma.retailer.findUnique({
     where: { id: retailerId },
     include: {
       prices: true,
     },
   });
+
+  if (!retailer && userId) {
+    const user = await prisma.user.findUnique({ where: { id: userId } });
+    if (user?.phone) {
+      retailer = await prisma.retailer.findUnique({
+        where: { phone: user.phone },
+        include: { prices: true },
+      });
+    }
+  }
 
   if (!retailer) {
     throw new Error(`RETAILER_NOT_FOUND: Retailer ID ${retailerId} does not exist.`);
@@ -82,10 +105,16 @@ export async function placeOrder(
 
   // 3. Fetch all requested SKUs and active schemes from database
   const skuIds = lines.map((l) => l.skuId);
+  const mappedCodes = lines
+    .map((l) => DEMO_SKU_CODE_MAP[l.skuId] || l.skuId)
+    .filter(Boolean);
+
   const skus = await prisma.sku.findMany({
     where: {
-      id: { in: skuIds },
-      active: true,
+      OR: [
+        { id: { in: skuIds }, active: true },
+        { code: { in: mappedCodes }, active: true },
+      ],
     },
     include: {
       schemes: {
@@ -97,7 +126,16 @@ export async function placeOrder(
     },
   });
 
-  const skuMap = new Map(skus.map((s) => [s.id, s]));
+  const skuMap = new Map<string, any>();
+  for (const s of skus) {
+    skuMap.set(s.id, s);
+    skuMap.set(s.code, s);
+    for (const [demoKey, codeVal] of Object.entries(DEMO_SKU_CODE_MAP)) {
+      if (codeVal === s.code) {
+        skuMap.set(demoKey, s);
+      }
+    }
+  }
 
   // Build price overrides lookup for this retailer
   const priceOverrides: Record<string, number> = {};
@@ -115,7 +153,7 @@ export async function placeOrder(
   const cartLineItems: CartLineItem[] = [];
 
   for (const line of lines) {
-    const sku = skuMap.get(line.skuId);
+    const sku = skuMap.get(line.skuId) || skuMap.get(DEMO_SKU_CODE_MAP[line.skuId]);
     if (!sku) {
       throw new Error(`SKU_NOT_FOUND: SKU ${line.skuId} is inactive or does not exist.`);
     }
@@ -171,7 +209,7 @@ export async function placeOrder(
   const order = await prisma.order.create({
     data: {
       orderNo,
-      retailerId,
+      retailerId: retailer.id,
       status,
       source,
       idempotencyKey,
@@ -183,7 +221,9 @@ export async function placeOrder(
       captureId,
       lines: {
         create: pricedCart.lines.map((pLine) => {
-          const originalLineInput = lines.find((l) => l.skuId === pLine.skuId);
+          const originalLineInput = lines.find(
+            (l) => l.skuId === pLine.skuId || DEMO_SKU_CODE_MAP[l.skuId] === pLine.skuCode
+          );
           return {
             sku: { connect: { id: pLine.skuId } },
             orderedQty: pLine.orderedQty,

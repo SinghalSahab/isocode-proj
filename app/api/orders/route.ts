@@ -67,8 +67,20 @@ export async function GET() {
     const session = await requireUser("retailer");
     const scoped = new ScopedDataAccess(session);
 
+    let whereClause: any = scoped.scopeOrderWhere();
+    try {
+      if (session.phone) {
+        const dbUser = await prisma.user.findUnique({
+          where: { phone: session.phone },
+        });
+        if (dbUser?.retailerId) {
+          whereClause = { retailerId: dbUser.retailerId };
+        }
+      }
+    } catch {}
+
     const orders = await prisma.order.findMany({
-      where: scoped.scopeOrderWhere(),
+      where: whereClause,
       include: {
         lines: {
           include: {

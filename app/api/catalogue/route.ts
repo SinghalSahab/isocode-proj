@@ -24,6 +24,15 @@ export async function GET() {
           prices: true,
         },
       });
+
+      if (!retailer && session.phone) {
+        retailer = await prisma.retailer.findUnique({
+          where: { phone: session.phone },
+          include: {
+            prices: true,
+          },
+        });
+      }
     } catch (err: any) {
       console.warn("Database unreachable in catalogue, checking demo profile:", err.message);
       dbOffline = true;

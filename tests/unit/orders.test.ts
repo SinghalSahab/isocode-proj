@@ -5,17 +5,26 @@ import { PrismaClient, OrderStatus, OrderSource } from "@prisma/client";
 
 describe("Order Counters & Daily Numbering", () => {
   it("formats order numbers sequentially with Asia/Kolkata date", async () => {
+    const kolkataDateStr = new Intl.DateTimeFormat("en-CA", {
+      timeZone: "Asia/Kolkata",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }).format(new Date()).replace(/-/g, "");
+
     const mockPrisma = {
       orderCounter: {
-        upsert: vi.fn().mockResolvedValue({ date: "20261109", lastSeq: 7 }),
+        upsert: vi.fn().mockImplementation(({ create }) =>
+          Promise.resolve({ date: create.date, lastSeq: 7 })
+        ),
       },
     } as unknown as PrismaClient;
 
     const orderNo = await getNextOrderNumber(mockPrisma);
-    expect(orderNo).toBe("ORD-20261109-0007");
+    expect(orderNo).toBe(`ORD-${kolkataDateStr}-0007`);
     expect(mockPrisma.orderCounter.upsert).toHaveBeenCalledWith(
       expect.objectContaining({
-        create: { date: "20261109", lastSeq: 1 },
+        create: { date: kolkataDateStr, lastSeq: 1 },
         update: { lastSeq: { increment: 1 } },
       })
     );

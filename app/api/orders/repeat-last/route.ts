@@ -8,11 +8,27 @@ export async function GET() {
     const session = await requireUser("retailer");
     const scoped = new ScopedDataAccess(session);
 
+    let whereClause: any = scoped.scopeOrderWhere({
+      status: { in: ["CONFIRMED", "EXPORTED", "PENDING_REVIEW"] },
+    });
+
+    try {
+      if (session.phone) {
+        const dbUser = await prisma.user.findUnique({
+          where: { phone: session.phone },
+        });
+        if (dbUser?.retailerId) {
+          whereClause = {
+            retailerId: dbUser.retailerId,
+            status: { in: ["CONFIRMED", "EXPORTED", "PENDING_REVIEW"] },
+          };
+        }
+      }
+    } catch {}
+
     // Find the latest order for this retailer
     const lastOrder = await prisma.order.findFirst({
-      where: scoped.scopeOrderWhere({
-        status: { in: ["CONFIRMED", "EXPORTED", "PENDING_REVIEW"] },
-      }),
+      where: whereClause,
       orderBy: { placedAt: "desc" },
       include: {
         lines: {

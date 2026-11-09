@@ -96,11 +96,15 @@ export default function CartPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ items }),
       });
-      if (!res.ok) throw new Error("Price calculation failed");
+      if (!res.ok) {
+        const errJson = await res.json().catch(() => ({}));
+        throw new Error(errJson.message || "Price calculation failed");
+      }
       const data = await res.json();
       setPricing(data);
-    } catch {
-      setError("Unable to calculate cart schemes and prices.");
+      setError(null);
+    } catch (err: any) {
+      setError(err?.message || "Unable to calculate cart schemes and prices.");
     }
   }, []);
 

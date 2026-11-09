@@ -1,5 +1,5 @@
-GitHub: <<GITHUB_URL>>
-Live app: <<LIVE_URL>>
+GitHub: https://github.com/SinghalSahab/isocode-proj
+Live app: https://isocode-proj-apet.vercel.app/
 
 # Technical Design Document (TDD)
 ## FMCG Distributor Retailer Ordering App with AI Order Capture

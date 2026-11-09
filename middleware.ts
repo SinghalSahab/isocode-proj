@@ -18,9 +18,23 @@ export async function middleware(request: NextRequest) {
     pathname.startsWith("/products") ||
     pathname.startsWith("/favicon.ico") ||
     pathname.startsWith("/manifest.json") ||
-    pathname.startsWith("/api/auth") ||
-    pathname === "/login"
+    pathname.startsWith("/api/auth")
   ) {
+    return NextResponse.next();
+  }
+
+  // 1b. If on /login with an already valid session, redirect into app
+  if (pathname === "/login") {
+    const sessionCookie = request.cookies.get(SESSION_COOKIE_NAME)?.value;
+    if (sessionCookie) {
+      try {
+        const { payload } = await jwtVerify(sessionCookie, getJwtSecret());
+        const role = payload.role as string;
+        return NextResponse.redirect(new URL(role === "desk" ? "/desk" : "/catalogue", request.url));
+      } catch {
+        // Token invalid or expired, continue to login page
+      }
+    }
     return NextResponse.next();
   }
 

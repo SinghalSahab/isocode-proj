@@ -37,6 +37,22 @@ export async function GET() {
     }
 
     if (!retailer) {
+      const demoUser =
+        DEMO_USERS[session.phone] ||
+        Object.values(DEMO_USERS).find((u) => u.retailerId === retailerId);
+      if (demoUser?.retailer) {
+        return NextResponse.json({
+          retailer: {
+            id: demoUser.retailer.id,
+            shopName: demoUser.retailer.shopName,
+            ownerName: demoUser.retailer.ownerName,
+            creditLimitPaise: demoUser.retailer.creditLimitPaise,
+            outstandingPaise: demoUser.retailer.outstandingPaise,
+            availableCreditPaise: demoUser.retailer.availableCreditPaise,
+          },
+          products: DEMO_PRODUCTS,
+        });
+      }
       return NextResponse.json({ error: "RETAILER_NOT_FOUND" }, { status: 404 });
     }
 

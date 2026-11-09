@@ -24,6 +24,45 @@ export async function POST(request: Request) {
     const phone = normalizePhone(parsed.data.phone);
     const code = parsed.data.code.trim();
 
+    // Fast-path for seeded reviewer accounts: immediately verify demo code without waiting
+    const expectedDemoOtp = process.env.DEMO_OTP || "123456";
+    if (DEMO_USERS[phone] && code === expectedDemoOtp) {
+      let user = null;
+      try {
+        user = await prisma.user.findUnique({
+          where: { phone },
+          include: { retailer: true },
+        });
+      } catch {}
+
+      const activeUser = user || DEMO_USERS[phone];
+      const token = await signSession({
+        userId: activeUser.id,
+        phone: activeUser.phone,
+        role: activeUser.role,
+        retailerId: (activeUser as any).retailerId || (activeUser as any).retailer?.id || null,
+        name: activeUser.name,
+        preferredLang: activeUser.preferredLang || "en",
+      });
+
+      const response = NextResponse.json({
+        success: true,
+        role: activeUser.role,
+        name: activeUser.name,
+        redirectUrl: activeUser.role === "desk" ? "/desk" : "/catalogue",
+      });
+
+      response.cookies.set(SESSION_COOKIE_NAME, token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        path: "/",
+        maxAge: 7 * 24 * 60 * 60,
+      });
+
+      return response;
+    }
+
     // Look for latest non-consumed challenge for this phone
     let challenge = null;
     try {
@@ -36,44 +75,6 @@ export async function POST(request: Request) {
       });
     } catch (dbErr: any) {
       console.warn("Database unreachable in verify-otp, checking demo challenge:", dbErr.message);
-    }
-
-    // If database is offline or no active challenge, check demo fallback credentials
-    const expectedDemoOtp = process.env.DEMO_OTP || "123456";
-    if (!challenge && DEMO_USERS[phone]) {
-      if (code !== expectedDemoOtp) {
-        return NextResponse.json(
-          { error: "INVALID_CODE", message: "Incorrect OTP code. Please enter the valid OTP." },
-          { status: 400 }
-        );
-      }
-
-      const demoUser = DEMO_USERS[phone];
-      const token = await signSession({
-        userId: demoUser.id,
-        phone: demoUser.phone,
-        role: demoUser.role,
-        retailerId: demoUser.retailerId || null,
-        name: demoUser.name,
-        preferredLang: demoUser.preferredLang || "en",
-      });
-
-      const response = NextResponse.json({
-        success: true,
-        role: demoUser.role,
-        name: demoUser.name,
-        redirectUrl: demoUser.role === "desk" ? "/desk" : "/catalogue",
-      });
-
-      response.cookies.set(SESSION_COOKIE_NAME, token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        path: "/",
-        maxAge: 7 * 24 * 60 * 60,
-      });
-
-      return response;
     }
 
     if (!challenge) {

@@ -72,9 +72,9 @@ export default function LoginPage() {
         return;
       }
 
-      // Successful verification
-      router.push(returnTo !== "/" ? returnTo : data.redirectUrl);
-      router.refresh();
+      // Successful verification: full browser navigation ensures cookie attachment
+      const destination = returnTo && returnTo !== "/" ? returnTo : (data.redirectUrl || "/catalogue");
+      window.location.href = destination;
     } catch {
       setError("Verification failed. Please try again.");
       setLoading(false);

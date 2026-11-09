@@ -19,7 +19,7 @@ This guide provides step-by-step instructions for running the application locall
 
 1. **Clone the repository:**
    ```bash
-   git clone <<GITHUB_URL>>
+   git clone https://github.com/SinghalSahab/isocode-proj.git
    cd company-a-distributor-ordering
    ```
 

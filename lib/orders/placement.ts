@@ -1,4 +1,4 @@
-import { PrismaClient, OrderStatus, OrderSource } from "@prisma/client";
+import { PrismaClient, Prisma, OrderStatus, OrderSource } from "@prisma/client";
 import { priceCart, CartLineItem } from "../schemes/engine";
 import { calculateCasePricePaise } from "../money/units";
 import { getNextOrderNumber } from "./counter";
@@ -185,7 +185,7 @@ export async function placeOrder(
         create: pricedCart.lines.map((pLine) => {
           const originalLineInput = lines.find((l) => l.skuId === pLine.skuId);
           return {
-            skuId: pLine.skuId,
+            sku: { connect: { id: pLine.skuId } },
             orderedQty: pLine.orderedQty,
             freeQty: pLine.freeQty,
             casePricePaiseSnapshot: pLine.casePricePaise,
@@ -193,7 +193,7 @@ export async function placeOrder(
             discountPaise: pLine.discountPaise,
             gstPaise: pLine.gstPaise,
             netPaise: pLine.netPaise,
-            schemeSnapshotJson: pLine.appliedSchemeLabel,
+            schemeSnapshotJson: pLine.appliedSchemeLabel as unknown as Prisma.InputJsonValue,
             originalText: originalLineInput?.originalText || null,
             aiConfidence: originalLineInput?.aiConfidence || null,
             editedByDesk: false,
@@ -229,7 +229,7 @@ export async function placeOrder(
     totalPaise: order.totalPaise,
     holdReason: order.holdReason,
     placedAt: order.placedAt,
-    linesCount: order.lines.length,
+    linesCount: pricedCart.lines.length,
     isExisting: false,
   };
 }

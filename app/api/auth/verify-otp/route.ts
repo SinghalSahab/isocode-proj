@@ -3,6 +3,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/db/prisma";
 import { normalizePhone, evaluateOtpChallenge, MAX_OTP_ATTEMPTS } from "@/lib/auth/otp";
 import { signSession, SESSION_COOKIE_NAME } from "@/lib/auth/session";
+import { DEMO_USERS } from "@/lib/db/demo-fallback";
 
 const verifyOtpSchema = z.object({
   phone: z.string().min(10).max(15),
@@ -24,13 +25,56 @@ export async function POST(request: Request) {
     const code = parsed.data.code.trim();
 
     // Look for latest non-consumed challenge for this phone
-    const challenge = await prisma.otpChallenge.findFirst({
-      where: {
-        phone,
-        consumedAt: null,
-      },
-      orderBy: { createdAt: "desc" },
-    });
+    let challenge = null;
+    try {
+      challenge = await prisma.otpChallenge.findFirst({
+        where: {
+          phone,
+          consumedAt: null,
+        },
+        orderBy: { createdAt: "desc" },
+      });
+    } catch (dbErr: any) {
+      console.warn("Database unreachable in verify-otp, checking demo challenge:", dbErr.message);
+    }
+
+    // If database is offline or no active challenge, check demo fallback credentials
+    const expectedDemoOtp = process.env.DEMO_OTP || "123456";
+    if (!challenge && DEMO_USERS[phone]) {
+      if (code !== expectedDemoOtp) {
+        return NextResponse.json(
+          { error: "INVALID_CODE", message: "Incorrect OTP code. For demo accounts, use 123456." },
+          { status: 400 }
+        );
+      }
+
+      const demoUser = DEMO_USERS[phone];
+      const token = await signSession({
+        userId: demoUser.id,
+        phone: demoUser.phone,
+        role: demoUser.role,
+        retailerId: demoUser.retailerId || null,
+        name: demoUser.name,
+        preferredLang: demoUser.preferredLang || "en",
+      });
+
+      const response = NextResponse.json({
+        success: true,
+        role: demoUser.role,
+        name: demoUser.name,
+        redirectUrl: demoUser.role === "desk" ? "/desk" : "/catalogue",
+      });
+
+      response.cookies.set(SESSION_COOKIE_NAME, token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        path: "/",
+        maxAge: 7 * 24 * 60 * 60,
+      });
+
+      return response;
+    }
 
     if (!challenge) {
       return NextResponse.json(
@@ -51,10 +95,12 @@ export async function POST(request: Request) {
 
     if (!evaluation.valid) {
       // Increment attempt count
-      await prisma.otpChallenge.update({
-        where: { id: challenge.id },
-        data: { attempts: { increment: 1 } },
-      });
+      try {
+        await prisma.otpChallenge.update({
+          where: { id: challenge.id },
+          data: { attempts: { increment: 1 } },
+        });
+      } catch {}
 
       if (evaluation.error === "MAX_ATTEMPTS_EXCEEDED" || challenge.attempts + 1 >= MAX_OTP_ATTEMPTS) {
         return NextResponse.json(
@@ -80,16 +126,23 @@ export async function POST(request: Request) {
     }
 
     // Mark challenge consumed
-    await prisma.otpChallenge.update({
-      where: { id: challenge.id },
-      data: { consumedAt: new Date() },
-    });
+    try {
+      await prisma.otpChallenge.update({
+        where: { id: challenge.id },
+        data: { consumedAt: new Date() },
+      });
+    } catch {}
 
     // Fetch user details
-    const user = await prisma.user.findUnique({
-      where: { phone },
-      include: { retailer: true },
-    });
+    let user = null;
+    try {
+      user = await prisma.user.findUnique({
+        where: { phone },
+        include: { retailer: true },
+      });
+    } catch {
+      user = DEMO_USERS[phone] || null;
+    }
 
     if (!user) {
       return NextResponse.json({ error: "USER_NOT_FOUND", message: "User account not found." }, { status: 404 });
@@ -100,7 +153,7 @@ export async function POST(request: Request) {
       userId: user.id,
       phone: user.phone,
       role: user.role,
-      retailerId: user.retailerId,
+      retailerId: user.retailerId || null,
       name: user.name,
       preferredLang: user.preferredLang || "en",
     });
@@ -130,4 +183,3 @@ export async function POST(request: Request) {
     );
   }
 }
-

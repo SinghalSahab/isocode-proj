@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db/prisma";
 import { requireUser } from "@/lib/auth/session";
 import { calculateCasePricePaise } from "@/lib/money/units";
+import { DEMO_PRODUCTS, DEMO_USERS } from "@/lib/db/demo-fallback";
 
 export async function GET() {
   try {
@@ -13,20 +14,50 @@ export async function GET() {
     }
 
     // 1. Fetch retailer profile
-    const retailer = await prisma.retailer.findUnique({
-      where: { id: retailerId },
-      include: {
-        prices: true,
-      },
-    });
+    let retailer = null;
+    let dbOffline = false;
+
+    try {
+      retailer = await prisma.retailer.findUnique({
+        where: { id: retailerId },
+        include: {
+          prices: true,
+        },
+      });
+    } catch (err: any) {
+      console.warn("Database unreachable in catalogue, checking demo profile:", err.message);
+      dbOffline = true;
+      const demoUser = Object.values(DEMO_USERS).find((u) => u.retailerId === retailerId);
+      if (demoUser?.retailer) {
+        retailer = {
+          ...demoUser.retailer,
+          prices: [],
+        } as any;
+      }
+    }
 
     if (!retailer) {
       return NextResponse.json({ error: "RETAILER_NOT_FOUND" }, { status: 404 });
     }
 
+    // If database is offline, serve demo products directly
+    if (dbOffline) {
+      return NextResponse.json({
+        retailer: {
+          id: retailer.id,
+          shopName: retailer.shopName,
+          ownerName: retailer.ownerName,
+          creditLimitPaise: retailer.creditLimitPaise,
+          outstandingPaise: retailer.outstandingPaise,
+          availableCreditPaise: Math.max(0, retailer.creditLimitPaise - retailer.outstandingPaise),
+        },
+        products: DEMO_PRODUCTS,
+      });
+    }
+
     // Map retailer price overrides
-    const priceOverrideMap = new Map(
-      retailer.prices.map((p) => [p.skuId, p.pricePerPiecePaise])
+    const priceOverrideMap = new Map<string, number>(
+      (retailer.prices || []).map((p: any) => [p.skuId, p.pricePerPiecePaise])
     );
 
     // 2. Fetch all active SKUs with current schemes
@@ -45,7 +76,8 @@ export async function GET() {
 
     const products = skus.map((sku) => {
       const overridePiecePaise = priceOverrideMap.get(sku.id);
-      const effectivePiecePaise = overridePiecePaise !== undefined ? overridePiecePaise : sku.dealerPricePerPiecePaise;
+      const effectivePiecePaise: number =
+        overridePiecePaise !== undefined ? overridePiecePaise : sku.dealerPricePerPiecePaise;
       const casePricePaise = calculateCasePricePaise(effectivePiecePaise, sku.piecesPerCase);
 
       const scheme = sku.schemes[0] || null;

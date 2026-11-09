@@ -146,8 +146,12 @@ export class RuleBasedProvider implements CaptureProvider {
 
     // Pattern 3: Standalone number not followed by variant/weight indicators (e.g. "chai patti 250 wala 5")
     if (qty === null) {
-      // Find trailing number or standalone number not followed by g, ml, wala
-      const standaloneMatches = [...lower.matchAll(/\b(\d+)\b(?!\s*(?:g|gm|gram|ml|kilo|kg|wala|wali|l|litre))/gi)];
+      const numRegex = /\b(\d+)\b(?!\s*(?:g|gm|gram|ml|kilo|kg|wala|wali|l|litre))/gi;
+      let m: RegExpExecArray | null;
+      const standaloneMatches: RegExpExecArray[] = [];
+      while ((m = numRegex.exec(lower)) !== null) {
+        standaloneMatches.push(m);
+      }
       if (standaloneMatches.length > 0) {
         const lastMatch = standaloneMatches[standaloneMatches.length - 1];
         qty = parseInt(lastMatch[1], 10);

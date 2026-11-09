@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Prisma } from "@prisma/client";
 import { GeminiProvider } from "./gemini";
 import { RuleBasedProvider } from "./rule-based";
 import { sanitizeCaptureText } from "./sanitizer";
@@ -221,7 +221,7 @@ export async function processOrderCapture(
       fallbackReason: fallbackReason || null,
       draftJson: {
         lines: draftLines,
-      },
+      } as unknown as Prisma.InputJsonValue,
       totalLines: draftLines.length,
     },
   });

@@ -1,0 +1,298 @@
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  retailer
+  desk
+  salesman
+
+  @@map("role")
+}
+
+enum OrderStatus {
+  DRAFT
+  PENDING_REVIEW
+  CREDIT_HOLD
+  CONFIRMED
+  REJECTED
+  EXPORTED
+
+  @@map("order_status")
+}
+
+enum OrderSource {
+  app
+  ai_text
+  repeat
+
+  @@map("order_source")
+}
+
+enum SchemeKind {
+  FREE_GOODS
+  SLAB_DISCOUNT
+  NONE
+
+  @@map("scheme_kind")
+}
+
+enum CaptureUnit {
+  case
+  piece
+  unknown
+
+  @@map("capture_unit")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  role          Role
+  name          String
+  phone         String    @unique
+  retailerId    String?   @map("retailer_id")
+  preferredLang String    @default("en") @map("preferred_lang")
+  createdAt     DateTime  @default(now()) @map("created_at")
+
+  retailer      Retailer? @relation("RetailerUsers", fields: [retailerId], references: [id], onDelete: SetNull)
+  salesmanOf    Retailer[] @relation("RetailerSalesman")
+  orderEvents   OrderEvent[]
+  exportBatches ExportBatch[]
+
+  @@map("users")
+}
+
+model Retailer {
+  id                 String    @id @default(cuid())
+  shopName           String    @map("shop_name")
+  ownerName          String    @map("owner_name")
+  phone              String    @unique
+  addressLine        String    @map("address_line")
+  city               String    @default("Jabalpur")
+  creditLimitPaise   Int       @map("credit_limit_paise")
+  outstandingPaise   Int       @default(0) @map("outstanding_paise")
+  salesmanUserId     String?   @map("salesman_user_id")
+  createdAt          DateTime  @default(now()) @map("created_at")
+
+  salesman           User?     @relation("RetailerSalesman", fields: [salesmanUserId], references: [id], onDelete: SetNull)
+  users              User[]    @relation("RetailerUsers")
+  orders             Order[]
+  prices             RetailerPrice[]
+  aliases            RetailerAlias[]
+  captureLogs        CaptureLog[]
+
+  @@map("retailers")
+}
+
+model OtpChallenge {
+  id          String    @id @default(cuid())
+  phone       String
+  codeHash    String    @map("code_hash")
+  expiresAt   DateTime  @map("expires_at")
+  attempts    Int       @default(0)
+  consumedAt  DateTime? @map("consumed_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  @@index([phone, expiresAt])
+  @@map("otp_challenges")
+}
+
+model Sku {
+  id                        String    @id @default(cuid())
+  code                      String    @unique
+  nameEn                    String    @map("name_en")
+  nameHi                    String    @map("name_hi")
+  brand                     String
+  piecesPerCase             Int       @map("pieces_per_case")
+  dealerPricePerPiecePaise  Int       @map("dealer_price_per_piece_paise")
+  gstRateBp                 Int       @default(1800) @map("gst_rate_bp")
+  stockCases                Int       @map("stock_cases")
+  imageKey                  String    @map("image_key")
+  active                    Boolean   @default(true)
+  createdAt                 DateTime  @default(now()) @map("created_at")
+
+  keywords                  SkuKeyword[]
+  schemes                   Scheme[]
+  retailerPrices            RetailerPrice[]
+  orderLines                OrderLine[]
+  aliases                   RetailerAlias[]
+
+  @@map("skus")
+}
+
+model SkuKeyword {
+  id                String    @id @default(cuid())
+  skuId             String    @map("sku_id")
+  keywordNormalised String    @map("keyword_normalised")
+  language          String    @default("hi")
+
+  sku               Sku       @relation(fields: [skuId], references: [id], onDelete: Cascade)
+
+  @@index([keywordNormalised])
+  @@map("sku_keywords")
+}
+
+model Scheme {
+  id          String      @id @default(cuid())
+  skuId       String      @map("sku_id")
+  kind        SchemeKind
+  configJson  Json        @map("config_json")
+  activeFrom  DateTime    @default(now()) @map("active_from")
+  activeTo    DateTime?   @map("active_to")
+  labelEn     String      @map("label_en")
+  labelHi     String      @map("label_hi")
+  createdAt   DateTime    @default(now()) @map("created_at")
+
+  sku         Sku         @relation(fields: [skuId], references: [id], onDelete: Cascade)
+
+  @@index([skuId, activeFrom])
+  @@map("schemes")
+}
+
+model RetailerPrice {
+  id                  String    @id @default(cuid())
+  retailerId          String    @map("retailer_id")
+  skuId               String    @map("sku_id")
+  pricePerPiecePaise  Int       @map("price_per_piece_paise")
+
+  retailer            Retailer  @relation(fields: [retailerId], references: [id], onDelete: Cascade)
+  sku                 Sku       @relation(fields: [skuId], references: [id], onDelete: Cascade)
+
+  @@unique([retailerId, skuId])
+  @@map("retailer_prices")
+}
+
+model Order {
+  id              String        @id @default(cuid())
+  orderNo         String        @unique @map("order_no")
+  retailerId      String        @map("retailer_id")
+  status          OrderStatus   @default(PENDING_REVIEW)
+  source          OrderSource   @default(app)
+  idempotencyKey  String        @unique @map("idempotency_key")
+  subtotalPaise   Int           @map("subtotal_paise")
+  discountPaise   Int           @default(0) @map("discount_paise")
+  gstPaise        Int           @map("gst_paise")
+  totalPaise      Int           @map("total_paise")
+  holdReason      String?       @map("hold_reason")
+  rejectReason    String?       @map("reject_reason")
+  placedAt        DateTime      @default(now()) @map("placed_at")
+  confirmedAt     DateTime?     @map("confirmed_at")
+  confirmedBy     String?       @map("confirmed_by")
+  exportedAt      DateTime?     @map("exported_at")
+  exportBatchId   String?       @map("export_batch_id")
+  captureId       String?       @map("capture_id")
+
+  retailer        Retailer      @relation(fields: [retailerId], references: [id], onDelete: Cascade)
+  exportBatch     ExportBatch?  @relation(fields: [exportBatchId], references: [id], onDelete: SetNull)
+  captureLog      CaptureLog?   @relation(fields: [captureId], references: [id], onDelete: SetNull)
+  lines           OrderLine[]
+  events          OrderEvent[]
+
+  @@index([retailerId, status])
+  @@index([placedAt])
+  @@index([status])
+  @@map("orders")
+}
+
+model OrderLine {
+  id                      String      @id @default(cuid())
+  orderId                 String      @map("order_id")
+  skuId                   String      @map("sku_id")
+  orderedQty              Int         @map("ordered_qty")
+  freeQty                 Int         @default(0) @map("free_qty")
+  casePricePaiseSnapshot  Int         @map("case_price_paise_snapshot")
+  grossPaise              Int         @map("gross_paise")
+  discountPaise           Int         @default(0) @map("discount_paise")
+  gstPaise                Int         @map("gst_paise")
+  netPaise                Int         @map("net_paise")
+  schemeSnapshotJson      Json        @map("scheme_snapshot_json")
+  originalText            String?     @map("original_text")
+  aiConfidence            String?     @map("ai_confidence")
+  editedByDesk            Boolean     @default(false) @map("edited_by_desk")
+
+  order                   Order       @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  sku                     Sku         @relation(fields: [skuId], references: [id], onDelete: Restrict)
+
+  @@index([orderId])
+  @@map("order_lines")
+}
+
+model OrderEvent {
+  id            String    @id @default(cuid())
+  orderId       String    @map("order_id")
+  actorUserId   String?   @map("actor_user_id")
+  type          String
+  payloadJson   Json      @map("payload_json")
+  at            DateTime  @default(now())
+
+  order         Order     @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  actorUser     User?     @relation(fields: [actorUserId], references: [id], onDelete: SetNull)
+
+  @@index([orderId, at])
+  @@map("order_events")
+}
+
+model RetailerAlias {
+  id                String    @id @default(cuid())
+  retailerId        String    @map("retailer_id")
+  phraseNormalised  String    @map("phrase_normalised")
+  skuId             String    @map("sku_id")
+  timesConfirmed    Int       @default(1) @map("times_confirmed")
+  lastUsedAt        DateTime  @default(now()) @map("last_used_at")
+
+  retailer          Retailer  @relation(fields: [retailerId], references: [id], onDelete: Cascade)
+  sku               Sku       @relation(fields: [skuId], references: [id], onDelete: Cascade)
+
+  @@unique([retailerId, phraseNormalised])
+  @@index([retailerId])
+  @@map("retailer_aliases")
+}
+
+model CaptureLog {
+  id                      String    @id @default(cuid())
+  retailerId              String    @map("retailer_id")
+  inputText               String    @map("input_text")
+  provider                String
+  model                   String?
+  latencyMs               Int       @map("latency_ms")
+  fallbackReason          String?   @map("fallback_reason")
+  draftJson               Json      @map("draft_json")
+  finalJson               Json?     @map("final_json")
+  acceptedUnchangedLines  Int?      @map("accepted_unchanged_lines")
+  totalLines              Int?      @map("total_lines")
+  createdAt               DateTime  @default(now()) @map("created_at")
+
+  retailer                Retailer  @relation(fields: [retailerId], references: [id], onDelete: Cascade)
+  orders                  Order[]
+
+  @@index([retailerId, createdAt])
+  @@map("capture_logs")
+}
+
+model ExportBatch {
+  id          String    @id @default(cuid())
+  createdBy   String?   @map("created_by")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  format      String
+  orderCount  Int       @map("order_count")
+  fileName    String    @map("file_name")
+  totalPaise  BigInt    @map("total_paise")
+
+  user        User?     @relation(fields: [createdBy], references: [id], onDelete: SetNull)
+  orders      Order[]
+
+  @@map("export_batches")
+}
+
+model OrderCounter {
+  date     String   @id
+  lastSeq  Int      @default(0) @map("last_seq")
+
+  @@map("order_counters")
+}

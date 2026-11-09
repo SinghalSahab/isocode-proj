@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+  <rect width="200" height="200" rx="16" fill="#F8F9FA"/>
+  <rect x="35" y="30" width="130" height="140" rx="12" fill="#D97706" stroke="#E5E7EB" stroke-width="2"/>
+  <rect x="45" y="45" width="110" height="110" rx="8" fill="#FFFFFF" fill-opacity="0.2"/>
+  <text x="100" y="75" font-family="system-ui, sans-serif" font-size="11" font-weight="600" fill="#FFFFFF" text-anchor="middle" letter-spacing="1">SUNFEAST FICTIONAL</text>
+  <text x="100" y="105" font-family="system-ui, sans-serif" font-size="16" font-weight="800" fill="#FFFFFF" text-anchor="middle">GLUCOSE XL</text>
+  <rect x="65" y="125" width="70" height="24" rx="12" fill="#FFFFFF"/>
+  <text x="100" y="141" font-family="system-ui, sans-serif" font-size="12" font-weight="700" fill="#1F2937" text-anchor="middle">150g</text>
+</svg>

@@ -388,14 +388,16 @@ The automated test suite runs via Vitest, partitioned into pure-logic unit tests
 | Test Suite Category | Test File | Test Count | Dependencies | Pass Status |
 |---|---|---|---|---|
 | **Money & Currency** | `tests/unit/money.test.ts` | 7 | Pure TypeScript (Zero DB) | **PASS** |
-| **Scheme Engine** | `tests/unit/schemes.test.ts` | 9 | Pure TypeScript (Zero DB) | **PASS** |
+| **Scheme Engine (Core)** | `tests/unit/schemes.test.ts` | 9 | Pure TypeScript (Zero DB) | **PASS** |
+| **Scheme Engine (Edge Cases)** | `tests/unit/schemes-edge-cases.test.ts` | 12 | Pure TypeScript (Zero DB) | **PASS** |
 | **Authentication & IDOR** | `tests/unit/auth.test.ts` | 12 | Pure TypeScript / `jose` | **PASS** |
+| **Auth Offline Resilience** | `tests/unit/auth-offline.test.ts` | 3 | Pure TypeScript / `jose` | **PASS** |
 | **AI Capture Pipeline** | `tests/unit/capture.test.ts` | 11 | Pure TypeScript / Fixture | **PASS** |
 | **Order Placement & Counters** | `tests/unit/orders.test.ts` | 3 | Pure TypeScript / Mock DB | **PASS** |
 | **Order State Machine** | `tests/unit/state-machine.test.ts` | 4 | Pure TypeScript (Zero DB) | **PASS** |
 | **Tally Export (XML/CSV)** | `tests/unit/tally.test.ts` | 4 | Pure TypeScript (Zero DB) | **PASS** |
 | **DB Concurrency & Safety** | `tests/db/concurrency.test.ts` | 2 | Safety Guard / Concurrency | **PASS** |
-| **Total Automated Tests** | **8 Test Suites** | **52 Tests** | **Hermetic & Fast** | **100% PASS** |
+| **Total Automated Tests** | **10 Test Suites** | **67 Tests** | **Hermetic & Fast** | **100% PASS** |
 
 ---
 

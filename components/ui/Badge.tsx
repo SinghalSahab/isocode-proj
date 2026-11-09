@@ -4,12 +4,12 @@ import { CheckCircle2, AlertTriangle, XCircle, Clock, Sparkles } from "lucide-re
 interface BadgeProps {
   children: React.ReactNode;
   variant?:
-    | "success"
-    | "warning"
-    | "danger"
-    | "neutral"
-    | "scheme"
-    | "info";
+  | "success"
+  | "warning"
+  | "danger"
+  | "neutral"
+  | "scheme"
+  | "info";
   size?: "sm" | "md";
   icon?: React.ReactNode;
   className?: string;

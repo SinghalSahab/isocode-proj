@@ -15,21 +15,21 @@ export const EmptyState: React.FC<{
   onAction,
   icon = <PackageX className="w-12 h-12 text-ink-muted/50 stroke-[1.5]" />,
 }) => {
-  return (
-    <div className="flex flex-col items-center justify-center p-8 text-center bg-surface border border-border rounded-card my-4">
-      <div className="mb-3">{icon}</div>
-      <h3 className="text-lg font-semibold text-ink mb-1">{title}</h3>
-      {description && (
-        <p className="text-sm text-ink-muted max-w-sm mb-5">{description}</p>
-      )}
-      {actionText && onAction && (
-        <Button variant="secondary" size="md" onClick={onAction}>
-          {actionText}
-        </Button>
-      )}
-    </div>
-  );
-};
+    return (
+      <div className="flex flex-col items-center justify-center p-8 text-center bg-surface border border-border rounded-card my-4">
+        <div className="mb-3">{icon}</div>
+        <h3 className="text-lg font-semibold text-ink mb-1">{title}</h3>
+        {description && (
+          <p className="text-sm text-ink-muted max-w-sm mb-5">{description}</p>
+        )}
+        {actionText && onAction && (
+          <Button variant="secondary" size="md" onClick={onAction}>
+            {actionText}
+          </Button>
+        )}
+      </div>
+    );
+  };
 
 export const ErrorState: React.FC<{
   title?: string;

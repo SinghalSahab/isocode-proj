@@ -65,11 +65,11 @@ export async function GET() {
         imageKey: sku.imageKey,
         scheme: scheme
           ? {
-              kind: scheme.kind,
-              configJson: scheme.configJson,
-              labelEn: scheme.labelEn,
-              labelHi: scheme.labelHi,
-            }
+            kind: scheme.kind,
+            configJson: scheme.configJson,
+            labelEn: scheme.labelEn,
+            labelHi: scheme.labelHi,
+          }
           : null,
       };
     });

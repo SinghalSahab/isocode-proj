@@ -53,11 +53,10 @@ export const BottomNav: React.FC<BottomNavProps> = ({ cartCount = 0, lang = "en"
             <Link
               key={item.href}
               href={item.href}
-              className={`flex flex-col items-center justify-center relative touch-target transition-colors ${
-                item.isActive
+              className={`flex flex-col items-center justify-center relative touch-target transition-colors ${item.isActive
                   ? "text-accent font-semibold"
                   : "text-ink-muted hover:text-ink"
-              }`}
+                }`}
             >
               <div className="relative">
                 <Icon className={`w-5 h-5 ${item.isActive ? "stroke-[2.5]" : "stroke-[1.75]"}`} />

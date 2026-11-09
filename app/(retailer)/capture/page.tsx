@@ -330,13 +330,12 @@ export default function OrderByMessagePage() {
                 return (
                   <div
                     key={line.id}
-                    className={`bg-surface border rounded-card p-4 space-y-3 transition-colors ${
-                      isOutOfStock
+                    className={`bg-surface border rounded-card p-4 space-y-3 transition-colors ${isOutOfStock
                         ? "border-danger/40 bg-red-50/20"
                         : line.needsUnitClarification
-                        ? "border-warning/50 bg-amber-50/20"
-                        : "border-border shadow-xs"
-                    }`}
+                          ? "border-warning/50 bg-amber-50/20"
+                          : "border-border shadow-xs"
+                      }`}
                   >
                     {/* Top Row: Original words chip & Confidence pill */}
                     <div className="flex items-center justify-between gap-2 flex-wrap">

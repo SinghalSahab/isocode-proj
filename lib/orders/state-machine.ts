@@ -3,8 +3,7 @@ import { OrderStatus } from "@prisma/client";
 export class InvalidOrderStateTransitionError extends Error {
   constructor(from: OrderStatus, to: OrderStatus, reason?: string) {
     super(
-      `INVALID_STATE_TRANSITION: Cannot transition order from ${from} to ${to}.${
-        reason ? ` Reason: ${reason}` : ""
+      `INVALID_STATE_TRANSITION: Cannot transition order from ${from} to ${to}.${reason ? ` Reason: ${reason}` : ""
       }`
     );
     this.name = "InvalidOrderStateTransitionError";

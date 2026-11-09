@@ -330,9 +330,8 @@ export default function DeskOrderDetailPage({ params }: { params: { id: string }
               </div>
               <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
                 <div
-                  className={`h-full rounded-full ${
-                    creditUsagePercent > 90 ? "bg-danger" : "bg-accent"
-                  }`}
+                  className={`h-full rounded-full ${creditUsagePercent > 90 ? "bg-danger" : "bg-accent"
+                    }`}
                   style={{ width: `${creditUsagePercent}%` }}
                 />
               </div>

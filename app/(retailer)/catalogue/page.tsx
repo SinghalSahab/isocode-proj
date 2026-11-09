@@ -245,11 +245,10 @@ export default function CataloguePage() {
               key={brand}
               type="button"
               onClick={() => setSelectedBrand(brand)}
-              className={`px-3.5 py-1.5 rounded-pill text-xs font-semibold whitespace-nowrap transition-colors touch-target ${
-                selectedBrand === brand
+              className={`px-3.5 py-1.5 rounded-pill text-xs font-semibold whitespace-nowrap transition-colors touch-target ${selectedBrand === brand
                   ? "bg-accent text-white shadow-xs"
                   : "bg-surface border border-border text-ink-muted hover:text-ink hover:bg-background"
-              }`}
+                }`}
             >
               {brand === "ALL" ? t("catalogue.all_brands", {}, lang) : brand}
             </button>
@@ -304,9 +303,8 @@ export default function CataloguePage() {
               return (
                 <div
                   key={product.id}
-                  className={`bg-surface border border-border rounded-card p-4 flex flex-col justify-between transition-shadow hover:shadow-sm ${
-                    isOOS ? "opacity-75 bg-gray-50/50" : ""
-                  }`}
+                  className={`bg-surface border border-border rounded-card p-4 flex flex-col justify-between transition-shadow hover:shadow-sm ${isOOS ? "opacity-75 bg-gray-50/50" : ""
+                    }`}
                 >
                   <div>
                     {/* Top row: Brand & Stock status badge */}

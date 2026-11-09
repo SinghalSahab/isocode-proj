@@ -13,21 +13,21 @@ import { roundHalfUp } from "../money/paise";
 
 export type SchemeConfig =
   | {
-      kind: "FREE_GOODS";
-      buyQty: number;
-      freeQty: number;
-      repeating?: boolean;
-    }
+    kind: "FREE_GOODS";
+    buyQty: number;
+    freeQty: number;
+    repeating?: boolean;
+  }
   | {
-      kind: "SLAB_DISCOUNT";
-      slabs: Array<{
-        minQty: number;
-        percentBp: number; // basis points (300 = 3%)
-      }>;
-    }
+    kind: "SLAB_DISCOUNT";
+    slabs: Array<{
+      minQty: number;
+      percentBp: number; // basis points (300 = 3%)
+    }>;
+  }
   | {
-      kind: "NONE";
-    };
+    kind: "NONE";
+  };
 
 export interface SchemeEngineInput {
   qtyCases: number;

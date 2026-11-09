@@ -177,11 +177,10 @@ export default function DeskOrderQueuePage() {
                 key={tab.key}
                 type="button"
                 onClick={() => setActiveTab(tab.key)}
-                className={`px-3.5 py-2 text-xs font-semibold whitespace-nowrap rounded-t-lg transition-colors border-b-2 ${
-                  activeTab === tab.key
+                className={`px-3.5 py-2 text-xs font-semibold whitespace-nowrap rounded-t-lg transition-colors border-b-2 ${activeTab === tab.key
                     ? "border-accent text-accent bg-accent-subtle/40"
                     : "border-transparent text-ink-muted hover:text-ink hover:bg-surface"
-                }`}
+                  }`}
               >
                 {tab.label}
               </button>

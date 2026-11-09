@@ -95,11 +95,10 @@ export const DeskNav: React.FC<DeskNavProps> = ({ userName = "Desk Staff", lang 
               <Link
                 key={link.href}
                 href={link.href}
-                className={`flex items-center gap-3 px-3 py-2.5 rounded-card text-sm font-medium transition-colors ${
-                  isActive
+                className={`flex items-center gap-3 px-3 py-2.5 rounded-card text-sm font-medium transition-colors ${isActive
                     ? "bg-accent text-white shadow-xs"
                     : "text-ink hover:bg-background hover:text-accent"
-                }`}
+                  }`}
               >
                 <Icon className={`w-4 h-4 ${isActive ? "text-white" : "text-ink-muted"}`} />
                 <span>{link.label}</span>

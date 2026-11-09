@@ -25,3 +25,4 @@ npm run db:reset  # Applies migrations and seeds idempotent demo data
 npm run dev       # Starts dev server on http://localhost:3000
 npm test          # Runs 50 pure unit tests + DB integration tests
 ```
+

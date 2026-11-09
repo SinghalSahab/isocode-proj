@@ -78,3 +78,4 @@ export async function GET() {
     return NextResponse.json({ error: "INACTIVE_FETCH_FAILED" }, { status: 500 });
   }
 }
+

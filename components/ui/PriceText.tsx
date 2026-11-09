@@ -49,3 +49,4 @@ export const PriceText: React.FC<PriceTextProps> = ({
     </div>
   );
 };
+

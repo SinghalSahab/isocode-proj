@@ -57,3 +57,4 @@ describe("Database Safety Guard & Concurrent Confirmations", () => {
     expect(stockInWarehouse).toBe(0); // No oversell! Stock is never negative.
   });
 });
+

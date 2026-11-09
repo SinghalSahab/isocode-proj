@@ -255,3 +255,4 @@ Follow these 7 steps to evaluate the end-to-end functionality in ~5 minutes:
 ### 5. AI Capture Shows "AI service unavailable, matched using rules"
 - **Cause**: `GEMINI_API_KEY` is not set or Google Gemini is offline/timing out.
 - **Behavior**: This is the intended graceful fallback! The deterministic rule matcher parsed the message cleanly. No action required unless testing live LLM tokens.
+

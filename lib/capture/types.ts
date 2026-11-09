@@ -82,3 +82,4 @@ export interface CaptureDraft {
   canConfirm: boolean;
   blockingReasons: string[];
 }
+

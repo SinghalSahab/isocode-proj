@@ -75,3 +75,4 @@ export const BottomNav: React.FC<BottomNavProps> = ({ cartCount = 0, lang = "en"
     </nav>
   );
 };
+

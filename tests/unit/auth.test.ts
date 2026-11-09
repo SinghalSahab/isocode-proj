@@ -186,3 +186,4 @@ describe("IDOR Protection & Query Scoping", () => {
     expect(() => scoped.getRetailerId()).toThrow(/UNAUTHORIZED_RETAILER_ACCESS/);
   });
 });
+

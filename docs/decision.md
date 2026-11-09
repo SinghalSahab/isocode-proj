@@ -161,3 +161,4 @@ This document records all explicit assumptions (Part A: A1–A19) and architectu
 - **D18 (Lightweight In-House i18n):** Zero-dependency JSON dictionary supporting real-time toggling between English and Hindi.
 - **D19 (Scope Boundary):** Voice capture, camera vision, and salesman offline sync are cleanly documented as cut (P2) without dead buttons or fake mock endpoints.
 - **D20 (Test-First Build Flow):** Pure logic (schemes, money, capture, Tally) is verified via offline unit tests before building database or UI layers.
+

@@ -128,3 +128,4 @@ export const ConfidencePill: React.FC<{ confidence: string }> = ({ confidence })
       );
   }
 };
+

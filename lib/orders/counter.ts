@@ -26,3 +26,4 @@ export async function getNextOrderNumber(prisma: PrismaClient): Promise<string> 
   const seqPadded = counter.lastSeq.toString().padStart(4, "0");
   return `ORD-${dateKey}-${seqPadded}`;
 }
+

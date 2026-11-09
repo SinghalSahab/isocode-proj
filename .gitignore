@@ -1,4 +1,5 @@
 # Dependencies
+# Dependencies
 node_modules
 /.pnp
 .pnp.js
@@ -32,3 +33,35 @@ next-env.d.ts
 *.swp
 .idea
 .vscode    
+/.pnp
+.pnp.js
+
+# Testing
+coverage
+
+# Next.js
+.next/
+out/
+build/
+dist/
+
+# Production
+*.pem
+
+# Environment variables
+.env
+.env*.local
+!.env.example
+
+# Vercel
+.vercel
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# OS & Editor
+.DS_Store
+*.swp
+.idea
+.vscode

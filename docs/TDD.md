@@ -460,3 +460,4 @@ Measured against Next.js production build:
 2. **SMS Gateway Mock:** Real SMS delivery is mocked; production deployment requires integrating a DLT-registered Indian SMS gateway (e.g. MSG91).
 3. **Single Active Scheme per SKU:** The core scheme engine supports one active scheme per SKU line; stacked schemes (e.g. free goods *plus* slab discount) are not enabled in the core build.
 4. **Neon Cold-Start Latency:** Free-tier Neon databases spin down after 5 minutes of inactivity, adding a 1–2 second delay on cold starts.
+

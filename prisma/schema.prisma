@@ -296,3 +296,4 @@ model OrderCounter {
 
   @@map("order_counters")
 }
+

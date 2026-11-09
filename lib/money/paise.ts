@@ -90,3 +90,4 @@ export function toBigIntPaise(paise: number | bigint): bigint {
 export function fromBigIntPaise(paise: bigint): number {
   return Number(paise);
 }
+

@@ -16,3 +16,4 @@ export function assertSafeTestDatabase(url: string | undefined): void {
     );
   }
 }
+

@@ -31,3 +31,4 @@ for (const p of products) {
 }
 
 console.log("Generated product SVGs successfully.");
+

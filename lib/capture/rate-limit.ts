@@ -51,3 +51,4 @@ export function checkCaptureRateLimit(key: string): {
 export function resetRateLimitStore(): void {
   rateLimitStore.clear();
 }
+

@@ -1,11 +1,17 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { cookies } from "next/headers";
 import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Company A - Distributor Ordering",
   description: "FMCG distributor ordering application with AI order capture",
-  viewport: "width=device-width, initial-scale=1, maximum-scale=1",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  themeColor: "#1F6F4A",
 };
 
 export default function RootLayout({
@@ -18,9 +24,6 @@ export default function RootLayout({
 
   return (
     <html lang={lang}>
-      <head>
-        <meta name="theme-color" content="#1F6F4A" />
-      </head>
       <body className="min-h-screen bg-background text-ink antialiased">
         {children}
       </body>

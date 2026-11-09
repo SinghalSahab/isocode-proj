@@ -17,12 +17,10 @@ describe("Capture Sanitizer & Security Guard", () => {
     expect(sanitizeCaptureText(longText).length).toBe(1000);
   });
 
-  it("normalizes stray trailing '2' from prompt pastes (Assumption A7)", () => {
-    const message = "bhaiya 5 peti biscuit chhota, 2 peti washing powder 1 kilo, chai patti 250 wala 1 peti 2";
+  it("preserves trailing quantity numbers in legitimate retailer orders (Assumption A7)", () => {
+    const message = "chai patti 250 wala 5";
     const normalized = normalizeOrderMessage(message);
-    expect(normalized).toBe(
-      "bhaiya 5 peti biscuit chhota, 2 peti washing powder 1 kilo, chai patti 250 wala 1 peti"
-    );
+    expect(normalized).toBe("chai patti 250 wala 5");
   });
 
   it("neutralises adversarial prompt injection attempts", async () => {

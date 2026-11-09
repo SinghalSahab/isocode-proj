@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 540" width="920" height="540">
+  <defs>
+    <style>
+      .bg { fill: #FAFAF7; }
+      .box { fill: #FFFFFF; stroke: #CBD5E1; stroke-width: 1.5; rx: 8; }
+      .box-accent { fill: #F0FDF4; stroke: #1F6F4A; stroke-width: 2; rx: 8; }
+      .box-highlight { fill: #EFF6FF; stroke: #2563EB; stroke-width: 1.5; rx: 8; }
+      .box-amber { fill: #FFFBEB; stroke: #D97706; stroke-width: 1.5; rx: 8; }
+      .title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-weight: bold; font-size: 14px; fill: #0F172A; }
+      .text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 11px; fill: #334155; }
+      .header-text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-weight: bold; font-size: 12px; fill: #1F6F4A; text-transform: uppercase; letter-spacing: 0.5px; }
+      .arrow { stroke: #64748B; stroke-width: 1.5; fill: none; marker-end: url(#arrowhead); }
+    </style>
+    <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#64748B" />
+    </marker>
+  </defs>
+
+  <rect width="920" height="540" class="bg" />
+
+  <!-- Diagram Title -->
+  <text x="30" y="35" class="title" font-size="18">System Architecture: End-to-End Component Flow</text>
+  <text x="30" y="55" class="text">Company A FMCG Distributor Platform · Next.js 14 App Router · Pure Deterministic Engines</text>
+
+  <!-- Layer 1: Client Tier -->
+  <rect x="30" y="75" width="860" height="70" fill="#F8FAFC" stroke="#E2E8F0" rx="8" />
+  <text x="45" y="95" class="header-text">1. Client Layer (Responsive Mobile 360px &amp; Desktop Terminal)</text>
+  <rect x="50" y="105" width="370" height="30" class="box" />
+  <text x="65" y="125" class="text">📱 Retailer PWA: 360px Mobile Web App (Catalogue, Live Cart, AI Paste)</text>
+  <rect x="470" y="105" width="400" height="30" class="box" />
+  <text x="485" y="125" class="text">💻 Order Desk Terminal: Order Queue, Approvals, Tally ERP Exports</text>
+
+  <!-- Layer 2: Next.js Runtime Tier -->
+  <rect x="30" y="165" width="860" height="75" fill="#F8FAFC" stroke="#E2E8F0" rx="8" />
+  <text x="45" y="185" class="header-text">2. Next.js 14 Server Runtime (Edge Middleware &amp; Scoped DAL)</text>
+  <rect x="50" y="195" width="250" height="32" class="box-highlight" />
+  <text x="65" y="215" class="text">Middleware: JWT &amp; Role RBAC Guard</text>
+  <rect x="320" y="195" width="260" height="32" class="box" />
+  <text x="335" y="215" class="text">Server Route Handlers &amp; Placement API</text>
+  <rect x="600" y="195" width="270" height="32" class="box-highlight" />
+  <text x="615" y="215" class="text">Scoped Data Access Layer (IDOR Guard)</text>
+
+  <!-- Layer 3: Pure Engines & AI Pipeline -->
+  <rect x="30" y="260" width="860" height="150" fill="#F8FAFC" stroke="#E2E8F0" rx="8" />
+  <text x="45" y="280" class="header-text">3. Deterministic Pure Modules (Zero DB) &amp; AI Capture Engine</text>
+  
+  <!-- Left: Pure Engines -->
+  <rect x="50" y="295" width="390" height="100" class="box-accent" />
+  <text x="65" y="318" class="title" fill="#1F6F4A">Deterministic Pure Engines (paise precision)</text>
+  <text x="65" y="340" class="text">• Scheme Engine: Free Goods (10+1) &amp; Slabs (3% off 5+)</text>
+  <text x="65" y="360" class="text">• Analytical Stock Cap: O(log S) binary search bounds</text>
+  <text x="65" y="380" class="text">• Tally ERP Engine: Validated XML &amp; RFC 4180 CSV</text>
+
+  <!-- Right: AI Module -->
+  <rect x="470" y="295" width="400" height="100" class="box-amber" />
+  <text x="485" y="318" class="title" fill="#D97706">AI Capture Pipeline with Fallback Chain</text>
+  <text x="485" y="340" class="text">• Sanitizer: 1,000 char cap &amp; injection boundary isolation</text>
+  <text x="485" y="360" class="text">• Primary: Google Gemini 2.0 Flash (REST, 8s timeout)</text>
+  <text x="485" y="380" class="text">• Resilient Fallback: Hinglish Rule Matcher &amp; Calibration</text>
+
+  <!-- Layer 4: Data Tier -->
+  <rect x="30" y="430" width="860" height="75" fill="#F8FAFC" stroke="#E2E8F0" rx="8" />
+  <text x="45" y="450" class="header-text">4. Database Tier (PostgreSQL via Prisma ORM)</text>
+  <rect x="50" y="460" width="260" height="32" class="box" />
+  <text x="65" y="480" class="text">Prisma Client Global Singleton</text>
+  <rect x="330" y="460" width="260" height="32" class="box-accent" />
+  <text x="345" y="480" class="text">Neon Pooled Endpoint (Host: -pooler)</text>
+  <rect x="610" y="460" width="260" height="32" class="box" />
+  <text x="625" y="480" class="text">Direct Endpoint / Local Docker (Port 5432)</text>
+
+  <!-- Connecting Arrows -->
+  <line x1="230" y1="145" x2="230" y2="165" class="arrow" />
+  <line x1="680" y1="145" x2="680" y2="165" class="arrow" />
+  <line x1="240" y1="240" x2="240" y2="295" class="arrow" />
+  <line x1="670" y1="240" x2="670" y2="295" class="arrow" />
+  <line x1="245" y1="395" x2="245" y2="430" class="arrow" />
+  <line x1="670" y1="395" x2="670" y2="430" class="arrow" />
+</svg>

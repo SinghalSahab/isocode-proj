@@ -34,7 +34,7 @@ export class GeminiProvider implements CaptureProvider {
       throw new Error("GEMINI_API_KEY_MISSING: Gemini API key not configured in environment.");
     }
 
-    const modelName = process.env.GEMINI_MODEL || "gemini-1.5-flash";
+    const modelName = process.env.GEMINI_MODEL || "gemini-2.0-flash";
     const normalizedText = normalizeOrderMessage(rawText);
 
     if (!normalizedText) {

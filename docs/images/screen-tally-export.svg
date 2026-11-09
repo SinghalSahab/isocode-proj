@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 360" width="700" height="360">
+  <defs>
+    <style>
+      .bg { fill: #FAFAF7; }
+      .card { fill: #FFFFFF; stroke: #CBD5E1; rx: 6; }
+      .btn-green { fill: #1F6F4A; rx: 4; }
+      .txt-bold { font-family: -apple-system, sans-serif; font-weight: bold; }
+      .txt { font-family: -apple-system, sans-serif; }
+    </style>
+  </defs>
+
+  <rect width="700" height="360" class="bg" />
+  <!-- Header -->
+  <rect x="0" y="0" width="700" height="50" fill="#FFFFFF" stroke="#E2E8F0" />
+  <text x="24" y="32" class="txt-bold" fill="#0F172A" font-size="16">Tally.ERP9 &amp; Prime Sales Order Voucher Export</text>
+
+  <!-- Controls bar -->
+  <rect x="24" y="65" width="652" height="50" class="card" />
+  <text x="40" y="95" class="txt-bold" fill="#0F172A" font-size="13">Select Format:</text>
+  <rect x="145" y="77" width="100" height="26" fill="#1F6F4A" rx="4" />
+  <text x="162" y="94" class="txt-bold" fill="#FFFFFF" font-size="11">XML (Tally)</text>
+  <rect x="255" y="77" width="90" height="26" fill="#F1F5F9" stroke="#CBD5E1" rx="4" />
+  <text x="282" y="94" class="txt" fill="#475569" font-size="11">CSV</text>
+
+  <rect x="480" y="75" width="180" height="30" class="btn-green" />
+  <text x="498" y="95" class="txt-bold" fill="#FFFFFF" font-size="12">⬇ Export Selected (3 Orders)</text>
+
+  <!-- Table of Confirmed Orders -->
+  <rect x="24" y="130" width="652" height="190" class="card" />
+  <rect x="24" y="130" width="652" height="30" fill="#F1F5F9" rx="6" />
+  <text x="40" y="150" class="txt-bold" fill="#475569" font-size="11">☑ ORDER NO</text>
+  <text x="180" y="150" class="txt-bold" fill="#475569" font-size="11">SHOP NAME</text>
+  <text x="360" y="150" class="txt-bold" fill="#475569" font-size="11">DATE</text>
+  <text x="460" y="150" class="txt-bold" fill="#475569" font-size="11">CASES (DISPATCH)</text>
+  <text x="590" y="150" class="txt-bold" fill="#475569" font-size="11">AMOUNT (₹)</text>
+
+  <text x="40" y="180" class="txt" fill="#0F172A" font-size="12">☑ ORD-20261109-0001</text>
+  <text x="180" y="180" class="txt-bold" fill="#0F172A" font-size="12">Gupta Kirana Store</text>
+  <text x="360" y="180" class="txt" fill="#64748B" font-size="12">09 Nov 2026</text>
+  <text x="460" y="180" class="txt" fill="#0F172A" font-size="12">15 (16)</text>
+  <text x="590" y="180" class="txt-bold" fill="#0F172A" font-size="12">₹20,793.37</text>
+
+  <text x="40" y="210" class="txt" fill="#0F172A" font-size="12">☑ ORD-20261109-0002</text>
+  <text x="180" y="210" class="txt-bold" fill="#0F172A" font-size="12">Sharma Provision Store</text>
+  <text x="360" y="210" class="txt" fill="#64748B" font-size="12">09 Nov 2026</text>
+  <text x="460" y="210" class="txt" fill="#0F172A" font-size="12">8 (8)</text>
+  <text x="590" y="210" class="txt-bold" fill="#0F172A" font-size="12">₹12,480.00</text>
+
+  <text x="40" y="240" class="txt" fill="#0F172A" font-size="12">☑ ORD-20261109-0003</text>
+  <text x="180" y="210" class="txt-bold" fill="#0F172A" font-size="12">Mahalaxmi Super Mart</text>
+  <text x="360" y="240" class="txt" fill="#64748B" font-size="12">09 Nov 2026</text>
+  <text x="460" y="240" class="txt" fill="#0F172A" font-size="12">10 (11)</text>
+  <text x="590" y="240" class="txt-bold" fill="#0F172A" font-size="12">₹14,950.00</text>
+</svg>

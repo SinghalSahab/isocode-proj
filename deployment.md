@@ -78,19 +78,20 @@ Executes scheme engine, integer paise math, Tally generator, state machine, and 
 ```bash
 npm run test:unit
 ```
-*Expected: 50 passed tests across 7 test files in under 2 seconds.*
+*Expected: 65 passed tests across 9 test files in under 2 seconds.*
 
 ### Run Database Integration Tests (Requires Local Postgres, NEVER Neon)
 Executes concurrency, atomic stock decrement, and safety guard tests:
 ```bash
 npm run test:db
 ```
-*Note: Includes a guard that immediately aborts if `TEST_DATABASE_URL` contains `neon.tech`.*
+*Expected: 2 passed tests across 1 file. Includes a guard that immediately aborts if `TEST_DATABASE_URL` contains `neon.tech`.*
 
-### Run All Tests
+### Run All Tests (Hermetic Unit + DB Safety Guard)
 ```bash
-npm test
+npm run test:all
 ```
+*Expected: 67 passed tests across 10 test files.* (`npm test` runs all 65 unit tests).
 
 ### Run TypeScript Strict Typecheck
 ```bash
@@ -102,7 +103,7 @@ npm run typecheck
 ```bash
 npm run build
 ```
-*Expected: Generates optimized static assets with retailer first load JS < 113 KB.*
+*Expected: Generates optimized static assets with retailer first load JS of 113 KB.*
 
 ---
 
@@ -111,7 +112,7 @@ npm run build
 ### Architecture Summary
 - **Hosting**: Vercel (Next.js 14 App Router, Edge/Serverless Functions)
 - **Database**: Neon Serverless PostgreSQL with pgBouncer pooling
-- **AI Integration**: Google Gemini 1.5 Flash (server-side only, with rule-based fallback)
+- **AI Integration**: Google Gemini 2.0 Flash (server-side only, with rule-based fallback)
 
 ### Step-by-Step Production Deployment
 
@@ -138,7 +139,7 @@ npm run build
      - `SESSION_SECRET`: A 32+ character random secret string for JWT signing.
      - `DEMO_OTP`: `123456`
      - `GEMINI_API_KEY`: *(Optional)* Your Google Gemini API Key.
-     - `GEMINI_MODEL`: `gemini-1.5-flash`
+     - `GEMINI_MODEL`: `gemini-2.0-flash`
 
 4. **Verify Live Deployment:**
    - Open the production Vercel URL.
@@ -156,7 +157,7 @@ npm run build
 | `SESSION_SECRET` | **Yes** | Secret cryptographic key used by `jose` to sign and verify session JWTs. Must be min 32 chars in production. | `random-32-char-cryptographic-salt-key-here` |
 | `DEMO_OTP` | **Yes** | Fixed demo OTP accepted for all seeded demo accounts (`123456`). Hidden from the on-screen UI for realistic review experience. | `123456` |
 | `GEMINI_API_KEY` | Optional | Google Gemini API key for AI order capture. If omitted or offline, pipeline falls back to rule matcher transparently. | `AIzaSy...` |
-| `GEMINI_MODEL` | Optional | Gemini model name. Defaults to `gemini-1.5-flash`. | `gemini-1.5-flash` |
+| `GEMINI_MODEL` | Optional | Gemini model name. Defaults to `gemini-2.0-flash`. | `gemini-2.0-flash` |
 
 ---
 
@@ -251,7 +252,7 @@ Follow these 7 steps to evaluate the end-to-end functionality in ~5 minutes:
 
 ### 3. Neon Free-Tier Cold Starts
 - **Cause**: Neon free compute branches suspend after 5 minutes of inactivity. The first query after wake-up can incur a 1–2 second delay.
-- **Fix**: The app uses Next.js connection pooling with automatic retry. Ensure `DATABASE_URL` uses the pooled endpoint (contains `-pooler.neon.tech`).
+- **Fix**: The application uses connection pooling via pgBouncer (`-pooler`). Ensure `DATABASE_URL` uses the pooled endpoint (contains `-pooler.neon.tech`). Once the compute branch resumes, subsequent queries execute in single-digit milliseconds.
 
 ### 4. Docker Port 5432 Already in Use
 - **Cause**: A local PostgreSQL service is already bound to port 5432.

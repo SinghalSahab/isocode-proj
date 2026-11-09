@@ -128,7 +128,7 @@ sequenceDiagram
 
 ```mermaid
 flowchart TD
-    Start["Retailer pastes message into /capture (max 1000 chars)"] --> Sanitizer["Sanitize input (lib/capture/sanitizer.ts)<br/>Trim, strip control chars, normalize stray '2'"]
+    Start["Retailer pastes message into /capture (max 1000 chars)"] --> Sanitizer["Sanitize input (lib/capture/sanitizer.ts)<br/>Trim, length cap, preserve legitimate trailing numbers"]
     Sanitizer --> Context["Build context (SKU catalog, retailer aliases, past 5 order SKUs)"]
     Context --> TryGemini{"Has GEMINI_API_KEY?"}
 

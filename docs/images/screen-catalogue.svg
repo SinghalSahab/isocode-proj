@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 620" width="360" height="620">
+  <defs>
+    <style>
+      .app-bg { fill: #FAFAF7; }
+      .card { fill: #FFFFFF; stroke: #E2E8F0; rx: 8; }
+      .accent-btn { fill: #1F6F4A; rx: 6; }
+      .badge-green { fill: #DCFCE7; stroke: #86EFAC; rx: 4; }
+      .badge-amber { fill: #FEF3C7; stroke: #FDE68A; rx: 4; }
+      .badge-red { fill: #FEE2E2; stroke: #FECACA; rx: 4; }
+      .txt-bold { font-family: -apple-system, sans-serif; font-weight: bold; }
+      .txt { font-family: -apple-system, sans-serif; }
+    </style>
+  </defs>
+
+  <rect width="360" height="620" class="app-bg" />
+
+  <!-- App Header -->
+  <rect x="0" y="0" width="360" height="54" fill="#FFFFFF" stroke="#E2E8F0" />
+  <rect x="16" y="12" width="28" height="28" fill="#1F6F4A" rx="6" />
+  <text x="25" y="31" class="txt-bold" fill="#FFFFFF" font-size="14">A</text>
+  <text x="52" y="31" class="txt-bold" fill="#0F172A" font-size="15">Company A</text>
+  <rect x="290" y="14" width="54" height="26" fill="#F8FAFC" stroke="#CBD5E1" rx="4" />
+  <text x="302" y="31" class="txt-bold" fill="#0F172A" font-size="11">हिन्दी</text>
+
+  <!-- Credit Strip -->
+  <rect x="16" y="66" width="328" height="42" fill="#F0FDF4" stroke="#BBF7D0" rx="6" />
+  <text x="28" y="84" class="txt" fill="#166534" font-size="11">Gupta Kirana Store · Credit Status</text>
+  <text x="28" y="100" class="txt-bold" fill="#14532D" font-size="12">Available: ₹85,000 / Limit: ₹1,00,000</text>
+
+  <!-- Search Bar -->
+  <rect x="16" y="118" width="328" height="36" fill="#FFFFFF" stroke="#CBD5E1" rx="6" />
+  <text x="32" y="140" class="txt" fill="#94A3B8" font-size="12">🔍 Search biscuits, soap, tea...</text>
+
+  <!-- Product 1: Glucose Biscuit -->
+  <rect x="16" y="164" width="328" height="125" class="card" />
+  <rect x="26" y="174" width="70" height="70" fill="#F1F5F9" rx="6" />
+  <text x="45" y="214" font-size="28">🍪</text>
+  <text x="106" y="188" class="txt-bold" fill="#0F172A" font-size="13">Glucose biscuit 75 g (case of 96)</text>
+  <text x="106" y="204" class="txt-bold" fill="#1F6F4A" font-size="14">₹777.60 <tspan fill="#64748B" font-size="11">/ case (₹8.10/pc)</tspan></text>
+  
+  <rect x="106" y="212" width="130" height="18" class="badge-green" />
+  <text x="112" y="225" class="txt-bold" fill="#166534" font-size="10">🎁 Buy 10 get 1 free</text>
+
+  <rect x="260" y="248" width="74" height="30" class="accent-btn" />
+  <text x="274" y="268" class="txt-bold" fill="#FFFFFF" font-size="12">Add 10</text>
+  <text x="26" y="270" class="txt" fill="#16A34A" font-size="10">● In Stock (340 cases)</text>
+
+  <!-- Product 2: Detergent Powder -->
+  <rect x="16" y="300" width="328" height="125" class="card" />
+  <rect x="26" y="310" width="70" height="70" fill="#F1F5F9" rx="6" />
+  <text x="45" y="350" font-size="28">🧼</text>
+  <text x="106" y="324" class="txt-bold" fill="#0F172A" font-size="13">Detergent powder 1 kg (case of 20)</text>
+  <text x="106" y="340" class="txt-bold" fill="#1F6F4A" font-size="14">₹2,030.00 <tspan fill="#64748B" font-size="11">/ case</tspan></text>
+  
+  <rect x="106" y="348" width="135" height="18" class="badge-amber" />
+  <text x="112" y="361" class="txt-bold" fill="#B45309" font-size="10">⚡ 3% off 5 or more cases</text>
+
+  <rect x="260" y="384" width="74" height="30" class="accent-btn" />
+  <text x="278" y="404" class="txt-bold" fill="#FFFFFF" font-size="12">Add 5</text>
+  <text x="26" y="406" class="txt" fill="#16A34A" font-size="10">● In Stock (85 cases)</text>
+
+  <!-- Product 3: Tea Leaf (Out of stock) -->
+  <rect x="16" y="436" width="328" height="90" class="card" />
+  <text x="106" y="460" class="txt-bold" fill="#64748B" font-size="13">Tea leaf 250 g (case of 40)</text>
+  <text x="106" y="478" class="txt-bold" fill="#64748B" font-size="13">₹4,720.00 / case</text>
+  <rect x="106" y="486" width="85" height="18" class="badge-red" />
+  <text x="112" y="499" class="txt-bold" fill="#DC2626" font-size="10">Out of Stock</text>
+  <rect x="260" y="480" width="74" height="30" fill="#E2E8F0" rx="6" />
+  <text x="274" y="500" class="txt" fill="#94A3B8" font-size="11">Disabled</text>
+
+  <!-- Bottom Floating Cart Bar -->
+  <rect x="16" y="546" width="328" height="50" fill="#1F6F4A" rx="8" />
+  <text x="32" y="575" class="txt-bold" fill="#FFFFFF" font-size="14">15 Cases · ₹17,926.00</text>
+  <text x="250" y="575" class="txt-bold" fill="#FFFFFF" font-size="13">View Cart →</text>
+</svg>

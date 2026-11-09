@@ -14,6 +14,7 @@ import {
   ShadingType,
   AlignmentType,
   convertInchesToTwip,
+  ImageRun,
 } from "docx";
 
 function parseInlineFormatting(text: string, forceBold = false): TextRun[] {
@@ -218,6 +219,62 @@ async function generateDocx() {
       continue;
     }
 
+    // Markdown Image: ![alt](path)
+    if (/^!\[([^\]]*)\]\(([^)]+)\)/.test(line.trim())) {
+      const match = line.trim().match(/^!\[([^\]]*)\]\(([^)]+)\)/);
+      if (match) {
+        const alt = match[1];
+        const imgRelPath = match[2];
+        const absPath = path.resolve(process.cwd(), "docs", imgRelPath);
+        if (fs.existsSync(absPath)) {
+          let width = 540;
+          let height = 320;
+          if (absPath.includes("screen-catalogue") || absPath.includes("screen-cart") || absPath.includes("screen-capture")) {
+            width = 240;
+            height = 413;
+          } else if (absPath.includes("screen-desk-review") || absPath.includes("screen-tally-export")) {
+            width = 520;
+            height = 340;
+          } else if (absPath.includes("architecture-flowchart")) {
+            width = 560;
+            height = 328;
+          } else if (absPath.includes("er-diagram")) {
+            width = 560;
+            height = 304;
+          }
+
+          children.push(
+            new Paragraph({
+              children: [
+                new ImageRun({
+                  data: fs.readFileSync(absPath),
+                  transformation: { width, height },
+                  type: "png",
+                }),
+              ],
+              alignment: AlignmentType.CENTER,
+              spacing: { before: 180, after: 60 },
+            }),
+            new Paragraph({
+              children: [
+                new TextRun({
+                  text: `Figure: ${alt}`,
+                  italics: true,
+                  size: 18,
+                  color: "475569",
+                  font: "Calibri",
+                }),
+              ],
+              alignment: AlignmentType.CENTER,
+              spacing: { before: 40, after: 160 },
+            })
+          );
+        }
+      }
+      i++;
+      continue;
+    }
+
     // Code Block or Mermaid block
     if (line.trim().startsWith("```")) {
       const codeType = line.trim().slice(3).trim();
@@ -228,6 +285,11 @@ async function generateDocx() {
         i++;
       }
       if (i < lines.length) i++; // skip ending ```
+
+      // If mermaid, skip raw code since PNG diagram is already rendered and embedded above
+      if (codeType === "mermaid") {
+        continue;
+      }
 
       const codeHeader = codeType ? `[${codeType.toUpperCase()} DEFINITION / CODE]` : "[CODE BLOCK]";
       children.push(
@@ -431,7 +493,7 @@ async function generateDocx() {
   const doc = new Document({
     title: "Technical Design Document (TDD) - FMCG Retailer Ordering App with AI Order Capture",
     description: "Detailed system architecture and specifications for Company A, Jabalpur",
-    creator: "Senior Full-Stack Engineer",
+    creator: "Prakhar (Full-Stack Engineer)",
     sections: [
       {
         properties: {

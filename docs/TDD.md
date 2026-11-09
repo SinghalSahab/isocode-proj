@@ -6,7 +6,7 @@ Live app: https://isocode-proj-apet.vercel.app/
 
 **Client:** Company A, Jabalpur (Madhya Pradesh)  
 **Distributor Profile:** Packaged food and home care distributor representing 4 brands, serving 1,800 kirana shops with 70 staff including 18 field salesmen; annual turnover ₹85–100 Cr.  
-**Author:** Senior Full-Stack Engineer  
+**Author:** Prakhar (Full-Stack Engineer)  
 **Date:** November 2026  
 
 ---
@@ -21,26 +21,28 @@ Because salesmen and retailers lack visibility into real-time stock levels and p
 ### 1.2 The Economic Problem (Brief's Exact Baseline: ₹52.5 Lakh / Year)
 At an operating scale of 600 orders per day across 300 business days per year and an average order value of ₹5,000, Company A handles 1,80,000 orders annually (₹90 Crore turnover). The brief quantifies the financial leakage across three specific failure modes:
 
-$$\begin{aligned}
-\text{1. Wrong Item / Quantity Returns:} & \quad 1,80,000 \times 5\% = 9,000 \text{ return dispatches} \times ₹350 = \mathbf{₹31.5\text{ Lakh / yr}} \\
-\text{2. Order Entry Data Team Staff:} & \quad 6 \text{ clerks} \times ₹2.6\text{ Lakh annual CTC} = \mathbf{₹15.6\text{ Lakh / yr}} \\
-\text{3. Post-Order Stock-Out Lost Margin:} & \quad 1\% \text{ lost sales on } ₹90\text{ Cr} = ₹90\text{ Lakh} \times 6\% \text{ gross margin} = \mathbf{₹5.4\text{ Lakh / yr}} \\
-\hline
-\mathbf{\text{Total Measurable Annual Leakage:}} & \quad ₹31.5\text{L} + ₹15.6\text{L} + ₹5.4\text{L} = \mathbf{₹52.5\text{ Lakh / Year}}
-\end{aligned}$$
+1. Wrong Item / Quantity Returns:
+   1,80,000 orders/yr * 5% error rate = 9,000 return dispatches * ₹350 = ₹31.5 Lakh / yr
+2. Order Entry Data Team Staff:
+   6 clerks * ₹2.6 Lakh annual CTC = ₹15.6 Lakh / yr
+3. Post-Order Stock-Out Lost Margin:
+   1% lost sales on ₹90 Cr = ₹90 Lakh * 6% gross margin = ₹5.4 Lakh / yr
+--------------------------------------------------------------------------
+Total Measurable Annual Leakage:
+   ₹31.5L + ₹15.6L + ₹5.4L = ₹52.5 Lakh / Year
 
 ### 1.3 What Was Built
-A production-grade, full-stack digital ordering slice built for low-end Android mobile devices on slow 3G cellular connections:
+A modular full-stack digital ordering slice built for low-end Android mobile devices on slow 3G cellular connections:
 1. **Retailer Ordering Web App (Mobile-First 360px PWA):** OTP authentication, bilingual English/Devanagari toggle, real-time catalogue with transparent GST basis, live promotional scheme computations, one-tap repeat orders, and credit limit tracking.
 2. **AI Order Capture Engine:** Converts messy Hinglish WhatsApp texts (e.g. *"bhaiya 5 peti biscuit chhota, 2 peti washing powder 1 kilo, chai patti 250 wala 1 peti"*) into candidate SKUs with server-calibrated confidence, interactive unit ambiguity resolution, out-of-stock guards, and human-in-the-loop review.
 3. **Pure Deterministic Scheme Engine:** Framework-free pure calculation module handling repeating free bonus goods (Buy 10 Get 1 Free), volume tiered slab discounts (3% off 5+ cases), and analytical stock-cap dispatch search in integer paise.
 4. **Order Desk Operations Portal:** Real-time queue, credit hold approvals with supervisory notes, concurrency-safe atomic inventory deduction transactions, and Tally ERP Sales Order voucher export (XML and CSV).
 
 ### 1.4 Success Metrics Alignment
-The solution directly drives the 3 targets specified in the client brief:
+The solution directly addresses the 3 targets specified in the client brief:
 - **50% of orders placed in app or captured by AI within 4 months:** Enabled by 1-minute mobile ordering and frictionless WhatsApp text pasting with zero typing friction.
-- **Order error rate reduced from 5% to < 1%:** Eradicated by real-time out-of-stock validation, human-confirmed AI review, and per-retailer alias learning.
-- **Order entry team reduced from 6 to 3 clerks:** Replaced manual notebook typing with a 1-click review and bulk Tally XML voucher import.
+- **Order error rate targets reducing from 5% to < 1%:** Designed to prevent errors via real-time out-of-stock validation, human-confirmed AI review, and per-retailer alias learning.
+- **Order entry team targets reduction from 6 to 3 clerks:** Replaces manual notebook typing with a 1-click review and bulk Tally XML voucher import.
 
 ---
 
@@ -48,13 +50,13 @@ The solution directly drives the 3 targets specified in the client brief:
 
 | Functional Area | Core Scope Built (P0) | Optional Depth Built (P1) | Explicitly Cut (P2) | Architectural Rationale |
 |---|---|---|---|---|
-| **Retailer Auth** | Mock OTP login (SHA-256 hashed, 5-min expiry, max 5 attempts), signed JWT session via `jose` in httpOnly cookie | Demo Mode banner (`DEMO_OTP=123456`) with quick reviewer login buttons | External SMS gateway API (Twilio / MSG91) | Avoided external DLT gateway credentials for hermetic evaluation (Assumption A8). |
+| **Retailer Auth** | Mock OTP login (SHA-256 hashed, 5-min expiry, max 5 attempts), signed JWT session via `jose` in httpOnly cookie | Demo Mode banner with quick reviewer login buttons (OTP `123456` accepted, hidden from UI display for realistic review) | External SMS gateway API (Twilio / MSG91) | Avoided external DLT gateway credentials for hermetic evaluation (Assumption A8). |
 | **Catalogue & Cart** | Large-card responsive catalogue (360px), stock badges, scheme badges, integer paise pricing, GST breakdown, live cart | Brand filter chips, SKU search, "Repeat last order" shortcut | In-app digital payments (UPI / Netbanking) | Out of scope per brief; B2B kirana operates on weekly credit cycles. |
 | **Scheme Engine** | Pure function for `FREE_GOODS` (repeating), `SLAB_DISCOUNT` (tiered), `NONE`, analytical stock cap, integer paise | Next-slab nudge hints ("Add 1 more case to get 3% off") | Cross-SKU multi-brand combo schemes | Brief only specifies single-SKU promotions (Assumption A6). |
-| **AI Capture** | Google Gemini 1.5 Flash structured parser, deterministic Hinglish rule fallback, unit clarification prompt | Per-retailer alias learning loop (`retailer_aliases`), in-memory sliding-window rate limiter | Speech-to-text Hindi voice notes, Vision OCR on handwritten photo lists | Cut per P2 brief instructions; avoids flaky speech models in core slice. |
+| **AI Capture** | Google Gemini 2.0 Flash structured parser, deterministic Hinglish rule fallback, unit clarification prompt | Per-retailer alias learning loop (`retailer_aliases`), in-memory sliding-window rate limiter | Speech-to-text Hindi voice notes, Vision OCR on handwritten photo lists | Cut per P2 brief instructions; avoids flaky speech models in core slice. |
 | **Order Desk** | Order queue with status filters, detail review, credit hold release modal, rejection modal, atomic stock transaction | "Retailers with no order in 14 days" dashboard, Printable Van loading list sheet | Salesman offline IndexedDB sync mode | Cut per P2 brief instructions; salesman role preserved in schema. |
 | **ERP Export** | Standard Tally XML Sales Order vouchers & RFC 4180 CSV export | Export batches history table with re-download | Automated GST e-invoicing API | Invoicing stays in Tally per brief. |
-| **PWA & Offline** | Web app shell caching via Service Worker (`public/sw.js`), Web App Manifest (`manifest.json`), touch targets ≥ 48px | Offline read-only catalogue cache | Offline write outbox with sync conflict resolution | Read-only offline catalogue provides 3G resilience without sync hazards. |
+| **PWA & Offline** | Web app shell caching via Service Worker (`public/sw.js`), Web App Manifest (`manifest.json`), touch targets ≥ 48px | Network-first with cache-fallback for `/api/catalogue` | Offline write outbox with sync conflict resolution | Read-only offline catalogue provides 3G resilience without sync hazards. |
 
 ---
 
@@ -62,6 +64,8 @@ The solution directly drives the 3 targets specified in the client brief:
 
 ### 3.1 Architecture Overview
 The system employs Next.js 14 App Router with React Server Components (RSC) to minimize clientside JavaScript on low-end kirana phones. Business calculations (money, schemes, state machine, Tally formatting) are strictly isolated as pure functions without database or UI dependencies.
+
+![System Architecture Flowchart](images/architecture-flowchart.png)
 
 ```mermaid
 flowchart TB
@@ -114,19 +118,21 @@ flowchart TB
 
 ### 3.2 Key Architectural Decisions (Referencing `docs/decision.md`)
 
-- **D1 (Next.js 14 App Router + TypeScript + Tailwind CSS):** Enables server-side rendering of the catalogue. Retailer first load JavaScript is kept strictly under **113 KB** (measured against the brief's < 120 KB budget), critical for 3G networks in central India.
+- **D1 (Next.js 14 App Router + TypeScript + Tailwind CSS):** Enables server-side rendering of the catalogue. Retailer first load JavaScript is kept strictly at **113 KB** (measured against the brief's < 120 KB budget), critical for 3G networks in central India.
 - **D2 (Neon Serverless PostgreSQL + Pooled Connection Split):** Neon provides elastic serverless Postgres with instant branching and built-in pgBouncer pooling. Connection pooling via `DATABASE_URL` (host containing `-pooler`) prevents connection starvation during high-concurrency order bursts. Schema migrations run via `DIRECT_URL` (non-pooled) to support transactional DDL.
 - **D3 (Prisma ORM with Global Singleton):** Implements typed database access and declarative migrations. A global singleton pattern (`lib/db/prisma.ts`) prevents connection leaks across serverless function re-invocations and local dev hot reloads.
 - **D4 (Local Docker Postgres for Development & CI):** A standard PostgreSQL 16 container (`docker-compose.yml`) provides an offline-capable development environment without requiring third-party cloud accounts.
 - **D5 (Pure Scheme Engine in Integer Paise):** `lib/schemes/engine.ts` is completely pure, framework-free, and has zero database dependencies. Eliminates floating-point rounding errors by storing and computing all currency in integer paise.
 - **D6 (Server-Authoritative Re-Pricing):** Client cart state is strictly an advisory request. The server recalculates all quantities, promotional schemes, GST, and credit checks upon order placement.
-- **D7 (AI Provider Abstraction with Fallback):** The `CaptureProvider` interface wraps Google Gemini 1.5 Flash. If the API key is missing, times out (> 8s), or returns invalid schema data, the system falls back seamlessly to the deterministic `RuleBasedProvider` with an honest review banner.
+- **D7 (AI Provider Abstraction with Fallback):** The `CaptureProvider` interface wraps Google Gemini 2.0 Flash. If the API key is missing, times out (> 8s), or returns invalid schema data, the system falls back seamlessly to the deterministic `RuleBasedProvider` with an honest review banner.
 - **D8 (AI Never Calculates Money):** AI models only extract SKU candidate codes and whole-case quantities. Price, scheme discount, GST, and totals are computed strictly by deterministic TypeScript code.
 - **D14 (Atomic Stock Decrement via Conditional Update):** Order confirmation runs inside a Prisma interactive transaction using atomic conditional SQL updates (`WHERE id = skuId AND stock_cases >= dispatchQty`), with SKUs locked in consistent sorted ID order to eliminate overselling and deadlocks.
 
 ---
 
 ## 4. Data Model & Schema Rationale
+
+![Entity-Relationship Data Model](images/er-diagram.png)
 
 ```mermaid
 erDiagram
@@ -262,7 +268,7 @@ erDiagram
 
 ## 5. Main Flows & User Journeys
 
-The detailed Mermaid sequence diagrams and decision trees are documented in [`docs/flow.md`](file:///Users/prakhar/isocode-proj/docs/flow.md). In summary:
+The detailed Mermaid sequence diagrams and decision trees are documented in [`docs/flow.md`](https://github.com/SinghalSahab/isocode-proj/blob/main/docs/flow.md). In summary:
 1. **Retailer Authentication Flow:** 10-digit mobile number input -> Mock OTP generated and hashed (SHA-256) -> Verified against 5-minute expiry and attempt limit -> Issues 7-day signed JWT session cookie.
 2. **Catalogue & Live Cart Flow:** Catalogue loads with shop-specific prices -> Cart recalculates schemes in real-time -> User confirms -> Server re-prices, checks credit limit, generates sequential order number, and sets status (`PENDING_REVIEW` or `CREDIT_HOLD`).
 3. **AI Message Capture Flow:** Paste text -> Sanitizer normalizes input -> Context constructed -> Primary Gemini Flash call with fallback to Hinglish Rule Matcher -> Server confidence calibration -> Review screen -> Human confirmation -> Placed with `source = 'ai_text'`.
@@ -276,39 +282,42 @@ The detailed Mermaid sequence diagrams and decision trees are documented in [`do
 ### 6.1 Mathematical Formulation & Rules
 The scheme engine (`lib/schemes/engine.ts`) is a pure function:
 
-$$\text{evaluateLineScheme}(Q, P_{\text{case}}, \text{GST}_{\text{bp}}, \text{Scheme}, S_{\text{avail}}) \rightarrow \text{SchemeEngineOutput}$$
+```
+evaluateLineScheme(Q, P_case, GST_bp, Scheme, S_avail) -> SchemeEngineOutput
+```
 
 #### 1. Free Goods Rule (`FREE_GOODS`):
 For repeating schemes (e.g. Buy 10 cases get 1 free):
-$$\text{freeQty} = \left\lfloor \frac{Q}{\text{buyQty}} \right\rfloor \times \text{freeBonusQty}$$
-$$\text{totalDispatchQty} = Q + \text{freeQty}$$
-Free bonus units are dispatched at zero billable rate and attract zero statutory GST (Assumption A4). Gross billable amount is strictly $Q \times P_{\text{case}}$.
+- `freeQty = floor(Q / buyQty) * freeBonusQty`
+- `totalDispatchQty = Q + freeQty`
+- `grossPaise = Q * P_case`
+Free bonus units are dispatched at zero billable rate and attract zero statutory GST (Assumption A4). Gross billable amount is strictly Q * P_case.
 
 #### 2. Tiered Slab Discount Rule (`SLAB_DISCOUNT`):
-The engine identifies the highest qualifying slab where $Q \ge \text{minQty}$:
-$$\text{discountPaise} = \text{roundHalfUp}\left( \frac{\text{grossPaise} \times \text{percentBp}}{10000} \right)$$
-$$\text{netPaise} = \text{grossPaise} - \text{discountPaise}$$
+The engine identifies the highest qualifying slab where Q >= minQty:
+- `discountPaise = roundHalfUp((grossPaise * percentBp) / 10000)`
+- `netPaise = grossPaise - discountPaise`
 The discount applies to the entire line gross, not just the incremental units beyond the threshold (Assumption A6).
 
 #### 3. Statutory GST Computation:
-$$\text{gstPaise} = \text{roundHalfUp}\left( \frac{\text{netPaise} \times \text{gstRateBp}}{10000} \right)$$
-$$\text{totalPaise} = \text{netPaise} + \text{gstPaise}$$
+- `gstPaise = roundHalfUp((netPaise * gstRateBp) / 10000)`
+- `totalPaise = netPaise + gstPaise`
 
 #### 4. Analytical Stock Cap Search:
-When free goods consume warehouse stock, dispatch equals $Q + \text{freeQty}(Q)$. If available stock is $S$, the maximum orderable cases $Q_{\max}$ satisfies:
-$$Q_{\max} + \text{freeQty}(Q_{\max}) \le S$$
-Because $Q + \text{freeQty}(Q)$ is monotonically non-decreasing, the engine computes $Q_{\max}$ in $O(\log S)$ time via binary search in range $[0, S]$.
-*Example:* At stock = 10 cases with Buy 10 Get 1 Free, ordering 10 cases requires dispatch of 11 cases (which exceeds stock). The engine correctly computes $Q_{\max} = 9$.
+When free goods consume warehouse stock, dispatch equals Q + freeQty(Q). If available stock is S, the maximum orderable cases Q_max satisfies:
+- `Q_max + freeQty(Q_max) <= S`
+Because Q + freeQty(Q) is monotonically non-decreasing, the engine computes Q_max in O(log S) time via binary search in range [0, S].
+*Example:* At stock = 10 cases with Buy 10 Get 1 Free, ordering 10 cases requires dispatch of 11 cases (which exceeds stock). The engine correctly computes Q_max = 9.
 
 ### 6.2 Worked Examples from Brief
 
-| SKU Item | Ordered Qty | Case Price | Gross (₹) | Scheme Applied | Discount (₹) | Free Qty | Net (₹) | GST (18%) | Total (₹) |
+| SKU Item | Ordered Qty | Case Price | Gross (₹) | Scheme Applied | Discount (₹) | Free Qty | Net (₹) | GST Rate & Amount | Total (₹) |
 |---|---|---|---|---|---|---|---|---|---|
-| **Glucose biscuit 75 g** | 10 cases | ₹777.60 | ₹7,776.00 | Buy 10 Get 1 Free | ₹0.00 | 1 case | ₹7,776.00 | ₹1,399.68 | **₹9,175.68** |
-| **Glucose biscuit 75 g** | 25 cases | ₹777.60 | ₹19,440.00 | Buy 10 Get 1 Free | ₹0.00 | 2 cases | ₹19,440.00 | ₹3,499.20 | **₹22,939.20** |
-| **Detergent powder 1 kg** | 4 cases | ₹2,030.00 | ₹8,120.00 | Below 5 cases threshold | ₹0.00 | 0 cases | ₹8,120.00 | ₹1,461.60 | **₹9,581.60** |
-| **Detergent powder 1 kg** | 5 cases | ₹2,030.00 | ₹10,150.00 | 3% off 5+ cases | ₹304.50 | 0 cases | ₹9,845.50 | ₹1,772.19 | **₹11,617.69** |
-| **Tea leaf 250 g** | 1 case | ₹4,720.00 | ₹4,720.00 | None (Stock = 0) | ₹0.00 | 0 cases | ₹4,720.00 | ₹236.00 | **Out of Stock** |
+| **Glucose biscuit 75 g** | 10 cases | ₹777.60 | ₹7,776.00 | Buy 10 Get 1 Free | ₹0.00 | 1 case | ₹7,776.00 | 18% (₹1,399.68) | **₹9,175.68** |
+| **Glucose biscuit 75 g** | 25 cases | ₹777.60 | ₹19,440.00 | Buy 10 Get 1 Free | ₹0.00 | 2 cases | ₹19,440.00 | 18% (₹3,499.20) | **₹22,939.20** |
+| **Detergent powder 1 kg** | 4 cases | ₹2,030.00 | ₹8,120.00 | Below 5 cases threshold | ₹0.00 | 0 cases | ₹8,120.00 | 18% (₹1,461.60) | **₹9,581.60** |
+| **Detergent powder 1 kg** | 5 cases | ₹2,030.00 | ₹10,150.00 | 3% off 5+ cases | ₹304.50 | 0 cases | ₹9,845.50 | 18% (₹1,772.19) | **₹11,617.69** |
+| **Tea leaf 250 g** | 1 case | ₹4,720.00 | ₹4,720.00 | None (Stock = 0) | ₹0.00 | 0 cases | ₹4,720.00 | 5% (₹236.00) | **Out of Stock** |
 
 ---
 
@@ -316,9 +325,9 @@ Because $Q + \text{freeQty}(Q)$ is monotonically non-decreasing, the engine comp
 
 ### 7.1 Pipeline Architecture
 The AI capture pipeline executes in `lib/capture/pipeline.ts`:
-1. **Input Sanitization:** Caps message at 1,000 characters, normalizes excessive whitespace, and removes trailing stray digits (Assumption A7).
+1. **Input Sanitization:** Caps message at 1,000 characters, normalizes excessive whitespace. (Assumption A7: Preserves legitimate trailing quantities; brief paste heading artifact handled at fixture/documentation level).
 2. **Context Assembly:** Fetches active catalog metadata, this retailer's confirmed aliases, and their last 5 orders. Financial prices and credit limits are strictly omitted from prompts.
-3. **Primary LLM Inference (Gemini 1.5 Flash):** Sends untrusted customer text wrapped in `<UNTRUSTED_CUSTOMER_TEXT>` boundaries with a strict JSON response schema and an 8-second timeout.
+3. **Primary LLM Inference (Gemini 2.0 Flash):** Sends untrusted customer text wrapped in `<UNTRUSTED_CUSTOMER_TEXT>` boundaries with a strict JSON response schema and an 8-second timeout.
 4. **Deterministic Fallback (`RuleBasedProvider`):** Automatically engages if Gemini is missing an API key, times out, throws a network exception, or returns invalid schema data.
 5. **Hallucination Guard & Confidence Calibration:** Validates that candidate SKU codes exist in the database. Calibrates confidence: High (≥ 0.85), Medium (0.60–0.84), Low (< 0.60), applying an alias boost (+0.15) and an ambiguity penalty (-0.10).
 6. **Unit Clarification Enforcement:** If unit is detected as pieces or unknown, the line transitions to `NEEDS_UNIT`. The UI presents large interactive buttons (*"Cases (Peti)"* vs *"Pieces (Packets)"*). Pieces must convert to whole-case multiples or the line blocks.
@@ -351,7 +360,7 @@ The rule-based provider was evaluated against a fixed 14-message test suite:
 | `eval-14` | Missing unit word (*"chai patti 250 wala 5"*) | Qty 5, Unit Unknown (NEEDS_UNIT) | **PASS** |
 
 **Evaluation Result:** 14 / 14 test cases passed (**100% pass rate**).  
-*Honest LLM Caveat:* Live cloud LLM evaluation was tested using Gemini 1.5 Flash API with active API keys; when running in offline CI environments without an active `GEMINI_API_KEY`, the 100% pass rate reflects the rule-based fallback provider.
+*Honest LLM & Generalization Note:* Automated CI unit tests evaluate hermetically and deterministically against the rule-based matcher (`RuleBasedProvider`) without requiring live Google cloud connectivity or live API keys. Because the rule-based matcher and the 14 evaluation fixtures were authored together to handle specific anticipated trade vernacular patterns (Hindi numbers, trade synonyms, grammages, missing units), this 100% pass rate confirms that the matcher correctly implements the target domain rules. It is not an empirical estimate of out-of-distribution real-world generalization.
 
 ---
 
@@ -370,12 +379,39 @@ Every data screen implements three distinct states:
 2. **Empty State:** Contextual empty views with primary actions (e.g. *"Your cart is empty -> Browse Catalogue"*).
 3. **Error State:** Descriptive error banners with visible retry buttons.
 
+### 8.3 Key Screens & Why They Look The Way They Do
+
+#### 1. Retailer Mobile Catalogue (360px Viewport)
+High-contrast card view optimized for one-hand store counter operation with large 48px touch steppers, real-time stock availability chips, and prominent promotional scheme badges.
+
+![Retailer Mobile Catalogue](images/screen-catalogue.png)
+
+#### 2. Real-Time Cart & Live Scheme Calculations
+Live scheme computation breakdown showing free goods dispatch badges, slab discount savings, transparent GST basis, and next-slab nudge hints ("Add 1 more case to get 3% off").
+
+![Real-Time Cart](images/screen-cart.png)
+
+#### 3. AI Order Capture & Disambiguation Review
+Human-in-the-loop review screen displaying captured Hinglish text, server-calibrated confidence levels, alternative SKU candidates, interactive unit toggles (peti vs packet), and out-of-stock badges.
+
+![AI Order Capture Review](images/screen-capture.png)
+
+#### 4. Order Desk Review & Inventory Decrement
+Operational desk terminal displaying retailer credit utilization gauges, supervisor credit hold release controls, and atomic conditional inventory deduction actions.
+
+![Order Desk Review](images/screen-desk-review.png)
+
+#### 5. Tally ERP XML & CSV Voucher Exporter
+Voucher batch exporter generating compliant Tally Sales Order XML and RFC 4180 CSV files with historical audit tracking and instant browser downloads.
+
+![Tally ERP Export](images/screen-tally-export.png)
+
 ---
 
 ## 9. Security, Privacy & Access Control
 
 - **Role-Based Middleware Guard:** Next.js middleware inspects signed JWT cookies on every request. Retailers cannot access `/desk/*` routes; desk staff are redirected away from retailer ordering views.
-- **Row-Level Query Scoping (IDOR Prevention):** All retailer queries are wrapped through `ScopedDataAccess` (`lib/db/scoped.ts`), which automatically forces `WHERE retailer_id = session.retailerId`. Verified by unit tests asserting that Store A cannot view or manipulate Store B's orders or prices.
+- **Row-Level Query Scoping (IDOR Prevention):** All retailer queries are wrapped through `ScopedDataAccess` (`lib/db/scoped.ts`), which automatically forces `WHERE retailer_id = session.retailerId`. Verified by unit tests asserting that Store A cannot view or manipulate Store B's orders or prices. The IDOR and access-control tests in `tests/unit/auth.test.ts` run against scoped mock objects and verify tenant scoping logic hermetically; they do not require or execute against a live PostgreSQL instance.
 - **OTP Hardening:** Plaintext OTPs are never stored; database stores SHA-256 hashes (`phone:code`). Enforces 5-minute expiry, max 5 failed attempts, and consumption tracking.
 - **Secrets & Data Privacy (DPDP Principles):** `.env.example` contains variable names only. All seed records use fictional phone numbers (`90000 00001`–`90000 00020`) and fictional store names. Database logs exclude raw query parameters to prevent PII leakage.
 
@@ -383,14 +419,17 @@ Every data screen implements three distinct states:
 
 ## 10. Verification & Test Suite Summary
 
-The automated test suite runs via Vitest, partitioned into pure-logic unit tests and database integration tests:
+The automated test suite runs via Vitest, partitioned into pure-logic unit tests and database safety tests:
+- **Pure Unit Tests (`npm test` / `npm run test:unit`):** **65 passed tests across 9 files** (pure TypeScript, zero DB, zero network).
+- **Database Safety & Concurrency Tests (`npm run test:db`):** **2 passed tests across 1 file** (includes Neon safety guard).
+- **Total Automated Test Suite (`npm run test:all`):** **67 passed tests across 10 files** (100% pass rate).
 
 | Test Suite Category | Test File | Test Count | Dependencies | Pass Status |
 |---|---|---|---|---|
 | **Money & Currency** | `tests/unit/money.test.ts` | 7 | Pure TypeScript (Zero DB) | **PASS** |
 | **Scheme Engine (Core)** | `tests/unit/schemes.test.ts` | 9 | Pure TypeScript (Zero DB) | **PASS** |
 | **Scheme Engine (Edge Cases)** | `tests/unit/schemes-edge-cases.test.ts` | 12 | Pure TypeScript (Zero DB) | **PASS** |
-| **Authentication & IDOR** | `tests/unit/auth.test.ts` | 12 | Pure TypeScript / `jose` | **PASS** |
+| **Authentication & IDOR (Mock)** | `tests/unit/auth.test.ts` | 12 | Pure TypeScript / `jose` | **PASS** |
 | **Auth Offline Resilience** | `tests/unit/auth-offline.test.ts` | 3 | Pure TypeScript / `jose` | **PASS** |
 | **AI Capture Pipeline** | `tests/unit/capture.test.ts` | 11 | Pure TypeScript / Fixture | **PASS** |
 | **Order Placement & Counters** | `tests/unit/orders.test.ts` | 3 | Pure TypeScript / Mock DB | **PASS** |
@@ -409,7 +448,7 @@ Measured against Next.js production build:
 - **Cart First Load JS:** **108 KB**.
 - **AI Capture First Load JS:** **108 KB**.
 - **Desk Portal First Load JS:** **102 KB**.
-- **Database Cold-Start Caveat:** On Neon serverless free tier, inactive database endpoints spin down after 5 minutes of zero traffic. Waking up a cold compute branch adds an initial 1–2 second latency on the first query. In production, this is mitigated by connection pooling (`-pooler`) and keep-alive health checks.
+- **Database Cold-Start Caveat:** On Neon serverless free tier, inactive database endpoints spin down after 5 minutes of zero traffic. Waking up a cold compute branch adds an initial 1–2 second latency on the first query. In production, this is mitigated by connection pooling (`-pooler`), ensuring subsequent queries execute in single-digit milliseconds.
 
 ---
 
@@ -425,7 +464,7 @@ Measured against Next.js production build:
 | **A4 (A-GST-FREE-GOODS)** | Bonus free goods attract zero invoice GST. | Trade promotional bonus goods are invoiced at zero taxable value. |
 | **A5 (A-ROUNDING)** | Half-up paisa rounding (`roundHalfUp`) at line level. | Commercial accounting convention to prevent fractional paisa drift. |
 | **A6 (A-SCHEME-SCOPE)** | Schemes apply independently per SKU line without cross-SKU combo baskets. | Matches brief's specified rules (Buy 10 get 1, 3% off 5+). |
-| **A7 (A-STRAY-TWO)** | Truncate trailing stray "2" in sample message paste. | Explicitly directed by client brief note. |
+| **A7 (A-STRAY-TWO)** | Stray "2" in brief paste was a heading artifact from the next problem; sanitizer preserves valid trailing user quantities, handling artifact in fixture. | Brief explicitly noted stray "2" belonged to next problem's heading. |
 | **A8 (A-MOCK-SMS)** | Mocked SMS gateway with fixed demo OTP `123456`. | Allows offline hiring assessment review without live telecom DLT credentials. |
 | **A9 (A-OUTSTANDING-CREDIT)** | Seeded outstanding balances with new order credit limit check. | Brief specifies credit holds but omits external ERP A/R ledger sync. |
 | **A10 (A-INVENTED-SEED)** | Invented extra SKUs, brands, and retailers in Jabalpur localities. | Provides realistic search ambiguity and multi-store testing data. |

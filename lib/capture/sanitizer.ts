@@ -35,14 +35,11 @@ export function sanitizeCaptureText(rawText: string): string {
 }
 
 /**
- * Handles Assumption A7 (A-STRAY-TWO):
- * Removes trailing stray numbers that belong to external section headings in prompt pastes.
+ * Normalises capture input text.
+ * Note on Assumption A7: The stray trailing '2' from the brief's paste
+ * was a brief heading artifact handled at the fixture level.
+ * The sanitizer preserves legitimate trailing quantities.
  */
 export function normalizeOrderMessage(message: string): string {
-  let text = sanitizeCaptureText(message);
-
-  // If text ends with "1 peti 2" or "peti 2" at the very end, trim the trailing 2
-  text = text.replace(/(peti|carton|case)\s+2$/i, "$1");
-
-  return text;
+  return sanitizeCaptureText(message);
 }

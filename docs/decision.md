@@ -48,12 +48,12 @@ This document records all explicit assumptions (Part A: A1–A19) and architectu
 - **Impact if Wrong:** Over-discounting or under-discounting on complex bundled promotions.
 - **How to Change:** Extend `lib/schemes/engine.ts` with cross-line basket evaluators.
 
-### A7 (A-STRAY-TWO): Truncation of Stray "2" in Sample Order Message
-- **Statement:** The sample message `"bhaiya 5 peti biscuit chhota, 2 peti washing powder 1 kilo, chai patti 250 wala 1 peti 2"` has a stray trailing "2" which belongs to the next section heading in the prompt. The message is parsed as ending at "1 peti".
-- **Why Needed:** Explicitly noted in the client brief: "Treat the message as ending at '1 peti'. Record this as an assumption."
-- **Alternatives Considered:** Treating the trailing "2" as 2 unassociated units (rejected: brief instruction).
-- **Impact if Wrong:** Would create an unwanted unmatched line or invalid quantity.
-- **How to Change:** Not required; follows explicit client instruction.
+### A7 (A-STRAY-TWO): Stray "2" in Sample Order Message Paste Treated as Heading Artifact
+- **Statement:** The sample message in the brief contained a stray trailing "2" after "1 peti", which was noted as a paste artifact from the next problem's heading. The sample message is treated as ending at "1 peti" in documentation and test fixtures. The production capture sanitizer does NOT strip legitimate trailing numbers, ensuring that legitimate trailing quantities (e.g. "chai patti 250 wala 5") typed by retailers are preserved without loss.
+- **Why Needed:** The client brief explicitly noted: "the source paste had a stray '2' after 'peti'. It belongs to the next problem's heading. Treat the message as ending at '1 peti'. Record this as an assumption."
+- **Alternatives Considered:** Hardcoding a regex in the production text sanitizer to strip trailing digits (rejected: would strip valid trailing quantities like "chai patti 250 wala 5" as tested in eval-14).
+- **Impact if Wrong:** None; test fixtures pass and real user inputs retain valid trailing numbers.
+- **How to Change:** Maintained at fixture/documentation level.
 
 ### A8 (A-MOCK-SMS): Mocked SMS Gateway with Fixed Demo OTP
 - **Statement:** Mobile OTP verification uses a mocked SMS delivery pipeline. Fixed demo OTP `123456` is accepted across all seeded reviewer accounts while the on-screen banner indicates active demo mode without revealing the OTP. Internal verification enforces SHA-256 code hashing, 5-minute expiry, and a maximum of 5 attempts.

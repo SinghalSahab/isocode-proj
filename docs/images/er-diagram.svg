@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 500" width="920" height="500">
+  <defs>
+    <style>
+      .bg { fill: #FAFAF7; }
+      .table-box { fill: #FFFFFF; stroke: #CBD5E1; stroke-width: 1.5; rx: 6; }
+      .th { fill: #1E293B; }
+      .th-text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-weight: bold; font-size: 12px; fill: #FFFFFF; }
+      .field { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 11px; fill: #334155; }
+      .pk { font-weight: bold; fill: #0F172A; }
+      .fk { fill: #2563EB; }
+      .title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-weight: bold; font-size: 16px; fill: #0F172A; }
+      .rel-line { stroke: #94A3B8; stroke-width: 1.5; stroke-dasharray: 4,4; fill: none; }
+    </style>
+  </defs>
+
+  <rect width="920" height="500" class="bg" />
+  <text x="30" y="35" class="title">Entity-Relationship Data Model (Key Tables &amp; Integrity Rationale)</text>
+
+  <!-- Table: users -->
+  <g transform="translate(30, 60)">
+    <rect width="180" height="130" class="table-box" />
+    <rect width="180" height="26" class="th" rx="6" />
+    <text x="12" y="18" class="th-text">users</text>
+    <text x="12" y="44" class="field pk">id (PK, String)</text>
+    <text x="12" y="62" class="field">phone (UK, String)</text>
+    <text x="12" y="80" class="field">role (retailer|desk)</text>
+    <text x="12" y="98" class="field fk">retailer_id (FK)</text>
+    <text x="12" y="116" class="field">preferred_lang</text>
+  </g>
+
+  <!-- Table: retailers -->
+  <g transform="translate(240, 60)">
+    <rect width="200" height="150" class="table-box" />
+    <rect width="200" height="26" class="th" rx="6" />
+    <text x="12" y="18" class="th-text">retailers</text>
+    <text x="12" y="44" class="field pk">id (PK, String)</text>
+    <text x="12" y="62" class="field">shop_name (String)</text>
+    <text x="12" y="80" class="field">credit_limit_paise (Int)</text>
+    <text x="12" y="98" class="field">outstanding_paise (Int)</text>
+    <text x="12" y="116" class="field fk">salesman_user_id (FK)</text>
+    <text x="12" y="134" class="field">created_at (DateTime)</text>
+  </g>
+
+  <!-- Table: skus -->
+  <g transform="translate(470, 60)">
+    <rect width="200" height="150" class="table-box" />
+    <rect width="200" height="26" class="th" rx="6" />
+    <text x="12" y="18" class="th-text">skus</text>
+    <text x="12" y="44" class="field pk">id (PK, String)</text>
+    <text x="12" y="62" class="field">code (UK, SKU-BS-075)</text>
+    <text x="12" y="80" class="field">pieces_per_case (Int)</text>
+    <text x="12" y="98" class="field">dealer_price_per_piece (Int)</text>
+    <text x="12" y="116" class="field">gst_rate_bp (1800=18%)</text>
+    <text x="12" y="134" class="field">stock_cases (Int)</text>
+  </g>
+
+  <!-- Table: schemes -->
+  <g transform="translate(700, 60)">
+    <rect width="190" height="130" class="table-box" />
+    <rect width="190" height="26" class="th" rx="6" />
+    <text x="12" y="18" class="th-text">schemes</text>
+    <text x="12" y="44" class="field pk">id (PK, String)</text>
+    <text x="12" y="62" class="field fk">sku_id (FK)</text>
+    <text x="12" y="80" class="field">kind (FREE_GOODS|SLAB)</text>
+    <text x="12" y="98" class="field">config_json (Json)</text>
+    <text x="12" y="116" class="field">active_from / active_to</text>
+  </g>
+
+  <!-- Table: orders -->
+  <g transform="translate(130, 260)">
+    <rect width="220" height="170" class="table-box" />
+    <rect width="220" height="26" class="th" rx="6" />
+    <text x="12" y="18" class="th-text">orders</text>
+    <text x="12" y="44" class="field pk">id (PK, String)</text>
+    <text x="12" y="62" class="field">order_no (UK, ORD-YYYYMMDD)</text>
+    <text x="12" y="80" class="field fk">retailer_id (FK)</text>
+    <text x="12" y="98" class="field">status (PENDING|CONFIRMED)</text>
+    <text x="12" y="116" class="field">subtotal / discount / gst (Int)</text>
+    <text x="12" y="134" class="field">total_paise (Int)</text>
+    <text x="12" y="152" class="field fk">export_batch_id (FK)</text>
+  </g>
+
+  <!-- Table: order_lines -->
+  <g transform="translate(400, 260)">
+    <rect width="240" height="170" class="table-box" />
+    <rect width="240" height="26" class="th" rx="6" />
+    <text x="12" y="18" class="th-text">order_lines (Immutable Snapshots)</text>
+    <text x="12" y="44" class="field pk">id (PK, String)</text>
+    <text x="12" y="62" class="field fk">order_id (FK) &amp; sku_id (FK)</text>
+    <text x="12" y="80" class="field">ordered_qty &amp; free_qty (Int)</text>
+    <text x="12" y="98" class="field">case_price_paise_snapshot (Int)</text>
+    <text x="12" y="116" class="field">gross / discount / gst / net (Int)</text>
+    <text x="12" y="134" class="field">scheme_snapshot_json (Json)</text>
+    <text x="12" y="152" class="field">ai_confidence &amp; original_text</text>
+  </g>
+
+  <!-- Table: retailer_aliases -->
+  <g transform="translate(680, 260)">
+    <rect width="210" height="130" class="table-box" />
+    <rect width="210" height="26" class="th" rx="6" />
+    <text x="12" y="18" class="th-text">retailer_aliases</text>
+    <text x="12" y="44" class="field pk">id (PK, String)</text>
+    <text x="12" y="62" class="field fk">retailer_id (FK)</text>
+    <text x="12" y="80" class="field">phrase_normalised (String)</text>
+    <text x="12" y="98" class="field fk">sku_id (FK)</text>
+    <text x="12" y="116" class="field">times_confirmed (Int)</text>
+  </g>
+</svg>

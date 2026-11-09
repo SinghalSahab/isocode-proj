@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 400" width="700" height="400">
+  <defs>
+    <style>
+      .bg { fill: #FAFAF7; }
+      .card { fill: #FFFFFF; stroke: #CBD5E1; rx: 6; }
+      .btn-green { fill: #1F6F4A; rx: 4; }
+      .btn-amber { fill: #D97706; rx: 4; }
+      .btn-red { fill: #DC2626; rx: 4; }
+      .badge-hold { fill: #FEF3C7; stroke: #FDE68A; rx: 4; }
+      .txt-bold { font-family: -apple-system, sans-serif; font-weight: bold; }
+      .txt { font-family: -apple-system, sans-serif; }
+    </style>
+  </defs>
+
+  <rect width="700" height="400" class="bg" />
+  <!-- Header bar -->
+  <rect x="0" y="0" width="700" height="50" fill="#FFFFFF" stroke="#E2E8F0" />
+  <text x="24" y="32" class="txt-bold" fill="#0F172A" font-size="16">Order Desk · Reviewing Order ORD-20261109-0001</text>
+  <rect x="560" y="14" width="115" height="24" class="badge-hold" />
+  <text x="572" y="30" class="txt-bold" fill="#B45309" font-size="11">PENDING_REVIEW</text>
+
+  <!-- Retailer Meta Card -->
+  <rect x="24" y="65" width="652" height="60" class="card" />
+  <text x="40" y="90" class="txt-bold" fill="#0F172A" font-size="13">Shop: Gupta Kirana Store (Ramesh Gupta · 90000 00001)</text>
+  <text x="40" y="110" class="txt" fill="#64748B" font-size="12">Credit Limit: ₹1,00,000 | Outstanding: ₹15,000 | Available: ₹85,000 (Passes credit check)</text>
+
+  <!-- Items Table -->
+  <rect x="24" y="135" width="652" height="180" class="card" />
+  <rect x="24" y="135" width="652" height="30" fill="#F1F5F9" rx="6" />
+  <text x="40" y="155" class="txt-bold" fill="#475569" font-size="11">SKU ITEM</text>
+  <text x="240" y="155" class="txt-bold" fill="#475569" font-size="11">QTY</text>
+  <text x="320" y="155" class="txt-bold" fill="#475569" font-size="11">FREE</text>
+  <text x="400" y="155" class="txt-bold" fill="#475569" font-size="11">RATE</text>
+  <text x="490" y="155" class="txt-bold" fill="#475569" font-size="11">SCHEME</text>
+  <text x="590" y="155" class="txt-bold" fill="#475569" font-size="11">TOTAL</text>
+
+  <!-- Row 1 -->
+  <text x="40" y="185" class="txt" fill="#0F172A" font-size="12">Glucose biscuit 75 g (SKU-BS-075)</text>
+  <text x="240" y="185" class="txt-bold" fill="#0F172A" font-size="12">10</text>
+  <text x="320" y="185" class="txt-bold" fill="#16A34A" font-size="12">+1</text>
+  <text x="400" y="185" class="txt" fill="#0F172A" font-size="12">₹777.60</text>
+  <text x="490" y="185" class="txt" fill="#16A34A" font-size="11">Buy 10 Get 1</text>
+  <text x="590" y="185" class="txt-bold" fill="#0F172A" font-size="12">₹9,175.68</text>
+
+  <!-- Row 2 -->
+  <text x="40" y="215" class="txt" fill="#0F172A" font-size="12">Detergent powder 1 kg (SKU-DT-1KG)</text>
+  <text x="240" y="215" class="txt-bold" fill="#0F172A" font-size="12">5</text>
+  <text x="320" y="215" class="txt" fill="#64748B" font-size="12">0</text>
+  <text x="400" y="215" class="txt" fill="#0F172A" font-size="12">₹2,030.00</text>
+  <text x="490" y="215" class="txt" fill="#16A34A" font-size="11">3% slab disc</text>
+  <text x="590" y="215" class="txt-bold" fill="#0F172A" font-size="12">₹11,617.69</text>
+
+  <line x1="40" y1="240" x2="660" y2="240" stroke="#E2E8F0" />
+  <text x="40" y="270" class="txt-bold" fill="#0F172A" font-size="14">Order Total: 15 cases (+1 free = 16 dispatch cases) · ₹20,793.37</text>
+
+  <!-- Action Buttons -->
+  <rect x="24" y="335" width="220" height="42" class="btn-green" />
+  <text x="42" y="361" class="txt-bold" fill="#FFFFFF" font-size="13">✓ Approve &amp; Decrement Stock</text>
+
+  <rect x="260" y="335" width="160" height="42" class="btn-amber" />
+  <text x="282" y="361" class="txt-bold" fill="#FFFFFF" font-size="13">⏸ Credit Hold</text>
+
+  <rect x="435" y="335" width="140" height="42" class="btn-red" />
+  <text x="465" y="361" class="txt-bold" fill="#FFFFFF" font-size="13">✕ Reject</text>
+</svg>

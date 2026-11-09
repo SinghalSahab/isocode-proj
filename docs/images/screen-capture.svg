@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 560" width="360" height="560">
+  <defs>
+    <style>
+      .app-bg { fill: #FAFAF7; }
+      .card { fill: #FFFFFF; stroke: #CBD5E1; rx: 8; }
+      .tag-high { fill: #DCFCE7; stroke: #86EFAC; rx: 4; }
+      .tag-warn { fill: #FEE2E2; stroke: #FECACA; rx: 4; }
+      .txt-bold { font-family: -apple-system, sans-serif; font-weight: bold; }
+      .txt { font-family: -apple-system, sans-serif; }
+    </style>
+  </defs>
+
+  <rect width="360" height="560" class="app-bg" />
+  <rect x="0" y="0" width="360" height="50" fill="#FFFFFF" stroke="#E2E8F0" />
+  <text x="16" y="32" class="txt-bold" fill="#0F172A" font-size="16">AI Order Capture · Review Lines</text>
+
+  <!-- Raw Input Message Banner -->
+  <rect x="16" y="64" width="328" height="60" fill="#F8FAFC" stroke="#CBD5E1" rx="6" />
+  <text x="26" y="82" class="txt-bold" fill="#475569" font-size="10">Pasted Customer Message:</text>
+  <text x="26" y="100" class="txt" fill="#0F172A" font-size="11">"bhaiya 5 peti biscuit chhota, 2 peti washing</text>
+  <text x="26" y="115" class="txt" fill="#0F172A" font-size="11">powder 1 kilo, chai patti 250 wala 1 peti"</text>
+
+  <!-- Parsed Line 1 -->
+  <rect x="16" y="136" width="328" height="90" class="card" />
+  <text x="28" y="158" class="txt" fill="#64748B" font-size="11">"5 peti biscuit chhota"</text>
+  <text x="28" y="178" class="txt-bold" fill="#0F172A" font-size="13">Glucose biscuit 75 g (SKU-BS-075)</text>
+  <rect x="28" y="190" width="70" height="18" class="tag-high" />
+  <text x="35" y="203" class="txt-bold" fill="#166534" font-size="10">High 95%</text>
+  <text x="110" y="203" class="txt-bold" fill="#1F6F4A" font-size="12">Qty: 5 cases</text>
+
+  <!-- Parsed Line 2 -->
+  <rect x="16" y="238" width="328" height="90" class="card" />
+  <text x="28" y="260" class="txt" fill="#64748B" font-size="11">"2 peti washing powder 1 kilo"</text>
+  <text x="28" y="280" class="txt-bold" fill="#0F172A" font-size="13">Detergent powder 1 kg (SKU-DT-1KG)</text>
+  <rect x="28" y="292" width="70" height="18" class="tag-high" />
+  <text x="35" y="305" class="txt-bold" fill="#166534" font-size="10">High 92%</text>
+  <text x="110" y="305" class="txt-bold" fill="#1F6F4A" font-size="12">Qty: 2 cases</text>
+
+  <!-- Parsed Line 3 (Out of stock) -->
+  <rect x="16" y="340" width="328" height="90" class="card" stroke="#FCA5A5" />
+  <text x="28" y="362" class="txt" fill="#64748B" font-size="11">"chai patti 250 wala 1 peti"</text>
+  <text x="28" y="382" class="txt-bold" fill="#0F172A" font-size="13">Tea leaf 250 g (SKU-TE-250)</text>
+  <rect x="28" y="394" width="80" height="18" class="tag-warn" />
+  <text x="34" y="407" class="txt-bold" fill="#DC2626" font-size="10">Out of Stock</text>
+  <text x="280" y="382" class="txt-bold" fill="#DC2626" font-size="12">Remove ✕</text>
+
+  <!-- Actions -->
+  <rect x="16" y="450" width="328" height="46" fill="#1F6F4A" rx="8" />
+  <text x="85" y="478" class="txt-bold" fill="#FFFFFF" font-size="14">Confirm Order (7 Cases) →</text>
+</svg>

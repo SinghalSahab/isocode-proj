@@ -15,7 +15,7 @@ export default function LoginPage() {
   const [lang, setLang] = useState<Language>("en");
   const [step, setStep] = useState<"phone" | "otp">("phone");
   const [phone, setPhone] = useState("");
-  const [otp, setOtp] = useState("123456");
+  const [otp, setOtp] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -44,9 +44,6 @@ export default function LoginPage() {
         return;
       }
 
-      if (data.demoOtp) {
-        setOtp(data.demoOtp);
-      }
       setPhone(activePhone);
       setStep("otp");
     } catch {

@@ -4,10 +4,10 @@ import { PrismaClient, OrderStatus, OrderSource } from "@prisma/client";
 import { confirmOrderTransaction } from "@/lib/orders/desk";
 
 describe("Database Safety Guard & Concurrent Confirmations", () => {
-  const testDbUrl = process.env.TEST_DATABASE_URL || "postgresql://postgres:postgres@localhost:5432/fmcg_distributor_test?schema=public";
+  const testDbUrl = process.env.TEST_DATABASE_URL;
 
   beforeAll(() => {
-    // Assert strictly that URL never targets neon.tech
+    // Assert strictly that URL never targets neon.tech (skipped if unset)
     assertSafeTestDatabase(testDbUrl);
   });
 

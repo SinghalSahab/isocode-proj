@@ -56,7 +56,7 @@ This document records all explicit assumptions (Part A: A1–A19) and architectu
 - **How to Change:** Not required; follows explicit client instruction.
 
 ### A8 (A-MOCK-SMS): Mocked SMS Gateway with Fixed Demo OTP
-- **Statement:** Mobile OTP verification uses a mocked SMS delivery pipeline. A prominent demo banner displays "Demo mode: OTP is 123456" for reviewers, while internal verification enforces SHA-256 code hashing, 5-minute expiry, and a maximum of 5 attempts.
+- **Statement:** Mobile OTP verification uses a mocked SMS delivery pipeline. Fixed demo OTP `123456` is accepted across all seeded reviewer accounts while the on-screen banner indicates active demo mode without revealing the OTP. Internal verification enforces SHA-256 code hashing, 5-minute expiry, and a maximum of 5 attempts.
 - **Why Needed:** Cloud SMS gateways (e.g. MSG91, Twilio, Fast2SMS) require DLT registration and external carrier credentials not suitable for offline evaluation.
 - **Alternatives Considered:** External SMS API integration (rejected: requires active API secrets and live SIM numbers).
 - **Impact if Wrong:** None for assessment; ready to swap in real SMS transport.

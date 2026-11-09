@@ -20,9 +20,15 @@ Replaces error-prone manual notebook orders and unverified WhatsApp messages wit
 ```bash
 cp .env.example .env
 npm install
-npm run db:up     # Starts local PostgreSQL 16 container
+npm run db:up     # Starts local PostgreSQL 16 container (or configure Neon in .env)
 npm run db:reset  # Applies migrations and seeds idempotent demo data
 npm run dev       # Starts dev server on http://localhost:3000
-npm test          # Runs 50 pure unit tests + DB integration tests
+npm test          # Runs 65 pure unit tests (zero DB required)
 ```
+
+### Reviewer Demo Logins (OTP is `123456` for all accounts)
+- **Retailer Persona 1 (Standard):** `90000 00001` (Ramesh Gupta - Gupta Kirana)
+- **Retailer Persona 2 (Credit Hold):** `90000 00002` (Suresh Sharma - Only ₹2,500 credit left)
+- **Order Desk Officer:** `90000 00010` (Amit Deshmukh - Order Desk Team)
+*(Note: The demo OTP `123456` is hidden on the login screen for realistic authentication).*
 

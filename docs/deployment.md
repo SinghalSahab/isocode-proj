@@ -152,9 +152,9 @@ npm run build
 |---|---|---|---|
 | `DATABASE_URL` | **Yes** | Primary runtime database connection string. On Neon, must use the POOLED connection string (host contains `-pooler`). On local Docker, points to port 5432. | `postgresql://user:pass@ep-pooler.region.aws.neon.tech/neondb?sslmode=require` |
 | `DIRECT_URL` | **Yes** | Direct (non-pooled) database connection string required by Prisma Migrate for schema migrations. | `postgresql://user:pass@ep-direct.region.aws.neon.tech/neondb?sslmode=require` |
-| `TEST_DATABASE_URL` | **Yes** (for db tests) | Dedicated local Postgres connection string for running integration tests. Protected by safety guard against `neon.tech`. | `postgresql://postgres:postgres@localhost:5432/fmcg_distributor_test?schema=public` |
+| `TEST_DATABASE_URL` | **Optional** | Can be omitted/skipped entirely. Only needed if running `npm run test:db` against a separate local test container. Protected by safety guard against `neon.tech`. | `postgresql://postgres:postgres@localhost:5432/fmcg_distributor_test?schema=public` |
 | `SESSION_SECRET` | **Yes** | Secret cryptographic key used by `jose` to sign and verify session JWTs. Must be min 32 chars in production. | `random-32-char-cryptographic-salt-key-here` |
-| `DEMO_OTP` | **Yes** | Default fixed OTP shown on the login banner for review evaluations. | `123456` |
+| `DEMO_OTP` | **Yes** | Fixed demo OTP accepted for all seeded demo accounts (`123456`). Hidden from the on-screen UI for realistic review experience. | `123456` |
 | `GEMINI_API_KEY` | Optional | Google Gemini API key for AI order capture. If omitted or offline, pipeline falls back to rule matcher transparently. | `AIzaSy...` |
 | `GEMINI_MODEL` | Optional | Gemini model name. Defaults to `gemini-1.5-flash`. | `gemini-1.5-flash` |
 
@@ -162,11 +162,16 @@ npm run build
 
 ## 6. Reviewer Demo Accounts & 5-Minute Walkthrough Script
 
+> [!IMPORTANT]
+> ### Demo Credentials Summary
+> - **Demo OTP for all accounts:** `123456` (Hidden from the UI banner for realistic authentication flow; enter `123456` when prompted).
+> - **Test Database:** Can be skipped entirely (`npm run test` runs all 65 unit tests hermetically with zero database).
+
 ### Demo Accounts Table
 
-| Role | Shop / User Name | Phone Number | OTP | What this Account Demonstrates |
+| Role | Shop / User Name | Phone Number | OTP Code | What this Account Demonstrates |
 |---|---|---|---|---|
-| **Retailer** | Gupta Kirana Store | `90000 00001` | `123456` | Standard retailer ordering with active schemes and historical repeat orders. |
+| **Retailer (Standard)** | Gupta Kirana Store | `90000 00001` | `123456` | Standard retailer ordering with active schemes and historical repeat orders. |
 | **Retailer (Hold Demo)** | Sharma Provision Store | `90000 00002` | `123456` | **Near Credit Limit Demo**: Available credit is only ₹2,500. Placing any normal order triggers **CREDIT_HOLD**! |
 | **Retailer (Override Demo)** | Mahalaxmi Super Mart | `90000 00003` | `123456` | **Per-Retailer Price Override**: Glucose biscuit 75g shows ₹7.80/piece instead of ₹8.10. |
 | **Retailer (Dormant Demo)** | Verma Daily Needs | `90000 00004` | `123456` | **14-Day Inactivity**: Last ordered 22 days ago; appears on desk inactive dashboard. |
@@ -181,7 +186,7 @@ Follow these 7 steps to evaluate the end-to-end functionality in ~5 minutes:
 
 #### Step 1: Log In as Retailer & Inspect Catalogue Schemes
 1. Go to `/login`.
-2. Notice the prominent on-screen banner: *"Demo mode: OTP is 123456"*.
+2. Notice the demo mode banner: *"Demo Mode: Verification active for registered test accounts"*. (The OTP is deliberately hidden on screen).
 3. Click the quick demo button for **Gupta Kirana** (`90000 00001`), enter OTP `123456`, and tap **Verify & Login**.
 4. You arrive at `/catalogue`. Notice the clean layout, Hindi/English toggle in header, credit strip (Available: ₹85,000 / Limit: ₹1,00,000), search bar, and brand chips.
 
@@ -255,4 +260,3 @@ Follow these 7 steps to evaluate the end-to-end functionality in ~5 minutes:
 ### 5. AI Capture Shows "AI service unavailable, matched using rules"
 - **Cause**: `GEMINI_API_KEY` is not set or Google Gemini is offline/timing out.
 - **Behavior**: This is the intended graceful fallback! The deterministic rule matcher parsed the message cleanly. No action required unless testing live LLM tokens.
-

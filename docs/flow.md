@@ -73,7 +73,7 @@ sequenceDiagram
     UI->>AuthAPI: POST /api/auth/send-otp { phone }
     AuthAPI->>DB: Check user exists & create hashed OTP challenge (SHA-256)
     AuthAPI-->>UI: 200 OK { demoOtp: "123456", expiresAt: 5 mins }
-    Note over UI: Banner displays "Demo mode: OTP is 123456"
+    Note over UI: Banner indicates demo mode active (Fixed OTP: 123456)
 
     Retailer->>UI: Submits 6-digit OTP
     UI->>AuthAPI: POST /api/auth/verify-otp { phone, code }

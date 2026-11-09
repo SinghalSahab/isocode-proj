@@ -1,7 +1,7 @@
 {
   "app": {
     "title": "Company A - Distributor Ordering",
-    "demo_banner": "Demo mode: OTP is 123456",
+    "demo_banner": "Demo Mode: Verification active for registered test accounts",
     "fallback_banner": "AI service unavailable, matched using rules. Please check each line carefully.",
     "switch_lang": "हिंदी",
     "role_retailer": "Retailer",

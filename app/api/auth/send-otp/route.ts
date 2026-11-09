@@ -72,11 +72,10 @@ export async function POST(request: Request) {
       }
     }
 
-    // In demo mode, we return demoOtp so the UI banner is confirmed
+    // Return standard success response (OTP hidden from payload)
     return NextResponse.json({
       success: true,
       message: "OTP sent to your mobile.",
-      demoOtp: code,
     });
   } catch (error) {
     console.error("Error in send-otp:", error);

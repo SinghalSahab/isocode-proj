@@ -43,7 +43,7 @@ export async function POST(request: Request) {
     if (!challenge && DEMO_USERS[phone]) {
       if (code !== expectedDemoOtp) {
         return NextResponse.json(
-          { error: "INVALID_CODE", message: "Incorrect OTP code. For demo accounts, use 123456." },
+          { error: "INVALID_CODE", message: "Incorrect OTP code. Please enter the valid OTP." },
           { status: 400 }
         );
       }

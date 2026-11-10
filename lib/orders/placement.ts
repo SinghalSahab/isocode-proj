@@ -15,6 +15,7 @@ export interface PlaceOrderInput {
   }>;
   captureId?: string;
   userId?: string;
+  userPhone?: string;
 }
 
 export interface PlaceOrderResult {
@@ -53,7 +54,7 @@ export async function placeOrder(
   prisma: PrismaClient,
   input: PlaceOrderInput
 ): Promise<PlaceOrderResult> {
-  const { retailerId, source, idempotencyKey, lines, captureId, userId } = input;
+  const { retailerId, source, idempotencyKey, lines, captureId, userId, userPhone } = input;
 
   if (!lines || lines.length === 0) {
     throw new Error("EMPTY_ORDER: At least one line item is required.");
@@ -89,13 +90,36 @@ export async function placeOrder(
     },
   });
 
-  if (!retailer && userId) {
-    const user = await prisma.user.findUnique({ where: { id: userId } });
-    if (user?.phone) {
+  let validActorUserId: string | null = null;
+  if (userId) {
+    const userById = await prisma.user.findUnique({ where: { id: userId } }).catch(() => null);
+    if (userById) {
+      validActorUserId = userById.id;
+      if (!retailer && userById.retailerId) {
+        retailer = await prisma.retailer.findUnique({
+          where: { id: userById.retailerId },
+          include: { prices: true },
+        }).catch(() => null);
+      }
+    }
+  }
+
+  if (!retailer && userPhone) {
+    const userByPhone = await prisma.user.findUnique({ where: { phone: userPhone } }).catch(() => null);
+    if (userByPhone) {
+      validActorUserId = userByPhone.id;
+      if (userByPhone.retailerId) {
+        retailer = await prisma.retailer.findUnique({
+          where: { id: userByPhone.retailerId },
+          include: { prices: true },
+        }).catch(() => null);
+      }
+    }
+    if (!retailer) {
       retailer = await prisma.retailer.findUnique({
-        where: { phone: user.phone },
+        where: { phone: userPhone },
         include: { prices: true },
-      });
+      }).catch(() => null);
     }
   }
 
@@ -242,7 +266,7 @@ export async function placeOrder(
       },
       events: {
         create: {
-          actorUserId: userId || null,
+          actorUserId: validActorUserId,
           type: status === OrderStatus.CREDIT_HOLD ? "ORDER_PLACED_CREDIT_HOLD" : "ORDER_PLACED",
           payloadJson: {
             source,

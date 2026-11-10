@@ -46,7 +46,7 @@ interface Order {
   lines: OrderLine[];
 }
 
-export default function MyOrdersPage() {
+function MyOrdersContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const placedOrderNo = searchParams.get("placed");
@@ -90,7 +90,7 @@ export default function MyOrdersPage() {
       newCart[line.skuId] = line.orderedQty;
     }
     localStorage.setItem("fmcg_cart", JSON.stringify(newCart));
-    router.push("/cart");
+    window.location.href = "/cart";
   };
 
   return (
@@ -301,6 +301,21 @@ export default function MyOrdersPage() {
 
       <BottomNav lang={lang} />
     </div>
+  );
+}
+
+export default function MyOrdersPage() {
+  return (
+    <React.Suspense
+      fallback={
+        <div className="min-h-screen bg-background pb-28 p-4 max-w-2xl mx-auto space-y-4">
+          <Skeleton className="h-10 w-48 rounded-md" />
+          <Skeleton className="h-28 w-full rounded-card" />
+        </div>
+      }
+    >
+      <MyOrdersContent />
+    </React.Suspense>
   );
 }
 

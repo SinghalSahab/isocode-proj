@@ -46,6 +46,7 @@ export async function POST(request: Request) {
       lines,
       captureId,
       userId: session.userId,
+      userPhone: session.phone,
     });
 
     return NextResponse.json({

@@ -159,9 +159,11 @@ export default function CartPage() {
       // Clear local cart
       localStorage.removeItem("fmcg_cart");
       setCartQuantities({});
+      setShowConfirmModal(false);
+      setSubmitting(false);
 
-      // Redirect to orders page with placed order
-      router.push(`/orders?placed=${data.order.orderNo}`);
+      // Full navigation guarantees cookie freshness and state reload
+      window.location.href = `/orders?placed=${encodeURIComponent(data.order.orderNo)}`;
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Error placing order.");
       setSubmitting(false);

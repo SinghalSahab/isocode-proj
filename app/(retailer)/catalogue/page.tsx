@@ -177,7 +177,7 @@ export default function CataloguePage() {
       }
       setCartQuantities(newCart);
       localStorage.setItem("fmcg_cart", JSON.stringify(newCart));
-      router.push("/cart");
+      window.location.href = "/cart";
     } catch {
       alert("Failed to load last order.");
     }

@@ -169,7 +169,20 @@ export default function OrderByMessagePage() {
   }, 0);
 
   const handleConfirmOrder = async () => {
-    if (!isReadyToConfirm || confirming) return;
+    if (!isReadyToConfirm) {
+      const oos = editableLines.find((l) => l.status === "OUT_OF_STOCK");
+      const unit = editableLines.find((l) => l.needsUnitClarification);
+      const unmatched = editableLines.find((l) => l.status === "UNMATCHED");
+      if (oos) {
+        setError(`Cannot place order with out-of-stock items (${oos.originalText || "Tea leaf"}). Tap the trash icon to remove it or choose an in-stock alternative.`);
+      } else if (unit) {
+        setError("Please confirm Case (Peti) or Packet unit for all highlighted items.");
+      } else if (unmatched) {
+        setError("Please choose a catalog SKU or remove unrecognized items.");
+      }
+      return;
+    }
+    if (confirming) return;
     setConfirming(true);
     setError(null);
 
@@ -199,7 +212,8 @@ export default function OrderByMessagePage() {
         throw new Error(data.message || "Failed to confirm AI order.");
       }
 
-      router.push(`/orders?placed=${data.order.orderNo}`);
+      setConfirming(false);
+      window.location.href = `/orders?placed=${encodeURIComponent(data.order.orderNo)}`;
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Confirmation failed.");
       setConfirming(false);
